@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './App.css'
+import AppLayout from './components/AppLayout'
+import LoginPage from './pages/LoginPage'
+import PagePlaceholder from './pages/PagePlaceholder'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function HomePage() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <section className="page-card">
+      <h2>Migration started</h2>
+      <p>First migrated screen: Login.</p>
+      <p>Legacy source: <code>old-project/web/app/login.html</code> and <code>old-project/web/app/js/login.js</code>.</p>
+    </section>
   )
 }
 
-export default App
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <AppLayout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: 'login', element: <LoginPage /> },
+      {
+        path: 'dashboard',
+        element: <PagePlaceholder title="Dashboard" legacyFiles={['old-project/web/app/dashboard.html', 'old-project/web/app/js/dashboard.js']} />,
+      },
+      {
+        path: 'user-db-list',
+        element: <PagePlaceholder title="User DB List" legacyFiles={['old-project/web/app/userDBList.html', 'old-project/web/app/js/userDBList.js']} />,
+      },
+      { path: '*', element: <Navigate to="/" replace /> },
+    ],
+  },
+])
+
+export default function App() {
+  return <RouterProvider router={router} />
+}
