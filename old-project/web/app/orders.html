@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR - Orders</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+    <link href="../common/css/flatDatePicker.css" rel="stylesheet" />
+    <!--Custom css-->
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        body,
+        html {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding-right: 0 !important;
+        }
+
+        .tab-content {
+            border: none !important;
+        }
+
+        .tblePadding {
+            padding: 0px 2px !important
+        }
+    </style>
+    <style>
+      
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <div id="includeTopMenu"></div>
+
+        <div class="container-fluid page-body-wrapper ">
+            <div id="includeLeftMenu"></div>
+            <!--  Main wrapper -->
+            <div class="main-panel">
+                <div class="theme-setting-wrapper">
+                    <div id="theme-settings" class="settings-panel" style="top: 55px !important">
+                        <div class="settings-heading" style="border-bottom: 1px solid #dee2e6;">
+                            Orders
+                            <i class="settings-close fas fa-times" data-ev="EV_CloseSubMenu"></i>
+                            <i class="fas fa-ellipsis-v menu-icon mx-4 settings-close d-none" id="dictEllipsisDropdown" data-bs-toggle="dropdown" aria-expanded="true" data-ev="EV_Show_EllipsisMenu"></i>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" id="dictEllipsisMenu" aria-labelledby="dictEllipsisDropdown">
+                            </div>
+                        </div>
+                        <ul class="list-unstyled" id="subMenuList" style="cursor:pointer">
+                            <li class="m-2 custom-dist-codes active" value="Orders Placed" data-ev="EV_Init_AllOrders"  > All Orders</li>
+                            <li class="m-2 custom-dist-codes" value="Orders Placed" data-ev="EV_Init_CancelledOrders"> Cancelled</li>
+                            <li class="m-2 custom-dist-codes" value="Orders Placed" data-ev="EV_Init_DraftOrders"> Draft</li>
+                            <li class="m-2 custom-dist-codes" value="Orders Placed" data-ev="EV_Init_SubmittedOrders"> Submitted</li>
+                            <li class="m-2 custom-dist-codes" value="Orders Placed" data-ev="EV_Init_ScheduledOrders"> Scheduled</li>
+
+                        </ul>
+                        
+                    </div>
+                </div>
+                <div class="content-wrapper">
+                    <div class="row d-flex menuDiv mt-0">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="manageFacilityGrid" style=" border-right: 1px solid #ddd;">
+                            <!-- Controls Row -->
+                            <div class="control-section custom-margin-dictionary" id="ClientFilter" style="padding:0px">
+                                <!-- Label -->
+                                <div class="d-flex justify-content-sm-between">
+                                    <label class="text-muted">Orders</label>
+                                </div>
+                            </div>
+                            <!-- Separator -->
+                            <div class="separator"></div>
+                            <div id="PatientTbl" class="card shadow-sm border-0 mb-3 custom-margin-dictionary">
+
+                                <!-- Card Header -->
+                                <div class="card-header bg-secondary text-black d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">
+                                        <i class="fa fa-users me-2"></i> Orders List
+                                    </h6>
+                                    <div class="d-flex">
+                                        <!-- Search By -->
+                                        <div class="fi d-flex flex-column  mb-2" style="width:200px">
+                                            <label for="searchType" class="fw-bold mb-1">Search By</label>
+                                            <select class="form-select form-select-sm" id="searchType" data-ev="Ev_SearchPhysOption" aria-label="Choose search type">
+                                                <option value="">Select</option>
+                                                <option value="orderNumber">Order Number</option>
+                                                <option value="orderType">Order Type</option>
+                                                <option value="orderingProviderNpi">Ordering Provider NPI</option>
+                                                <option value="patientName">Patient Name</option>
+                                                <option value="patientDob">Patient DOB</option>
+                                                <option value="patientGender">Patient Gender</option>
+                                                <option value="patientSSN">Patient SSN</option>
+                                                <option value="requestedDos">Requested Dates of Service</option>
+                                                <option value="cptCode">CPT Codes</option>
+                                                <option value="orderStatus">Order Status</option>
+                                                <option value="serviceLocationId">Service Location Code</option>
+                                                <option value="serviceLocationName">Service Location Name</option>
+                                                <option value="clientName">Client Name</option>
+                                                <option value="submittedBy">Submitted By</option>
+                                                <option value="priority">Priority</option>
+                                            </select>
+
+                                        </div>
+                                        <div id="searchVal" class="fi d-flex flex-column mb-2 mx-1" style="width:200px" data-model="ValMeta">
+                                            <label for="searchValue" class="fw-bold mb-1">Search Value</label>
+                                            <input type="text" class="form-control form-control-sm " id="searchVal"
+                                                   placeholder="Enter Search Value...." autocomplete="off" data-model-prop="SearchVal" style="background:white">
+                                        </div>
+                                        <button type="button" class="custom-add-btn btn-primary" id="btnSearchPhysician" data-ev="Ev_searchOrders" data-toggle="tooltip" title="Search Physician " aria-label="Search" style="
+                                            height: 25px;
+                                            margin-top: 18px;
+                                        ">
+                                            <i class="fa-solid fa-magnifying-glass" data-ev="Ev_searchOrders" aria-hidden="true"></i>Search
+                                        </button>
+                                        <button type="button" class="custom-add-btn btn-info" data-toggle="modal" data-target="#advancedSearchModal" data-ev="Ev_Show_AdvanceSearch" title="Advance Search " aria-label="Search" style="height: 25px; margin-top: 18px;">
+                                            <i class="fa-solid fa-filter" data-ev="Ev_Show_AdvanceSearch" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="custom-add-btn btn-info" id="btnDownloadOrder" title="Download" data-ev="Ev_Downlaod_Orders" style="height: 25px; margin-top: 18px;">
+                                            <i class="fa-solid fa-cloud-download-alt" data-ev="Ev_Downlaod_Orders" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="downloadStatusArea" class="bg-secondary"></div>
+                                <div id="OrdersAccordianIns" class="  mt-0 mb-1" data-single-open="true">
+                                    <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <!-- Accordion Header Button -->
+                                            <button class="ord-acc-header flex-grow-1 text-start p-0 border-0" id="ordAcc_hdr_0_0" type="button"
+                                                    aria-expanded="false" aria-controls="ordAcc_panel_0_0">
+                                                <div class="card-header   d-flex align-items-center">
+                                                    <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                    <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                                </div>
+                                                <span class="ord-acc-icons">
+                                                    <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+
+
+                                        <!-- Accordion Panel -->
+                                        <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0">
+                                            <div class="ord-acc-inner pt-1 p-3">
+                                                <ul class="list-unstyled mb-0 small" id="OrdersAllIns"></ul>
+                                                <ul class="list-unstyled mb-0 small d-none" id="OrdersCancelledIns"></ul>
+                                                <ul class="list-unstyled mb-0 small d-none" id="OrdersDraftIns"></ul>
+                                                <ul class="list-unstyled mb-0 small d-none" id="OrdersSubmittedIns"></ul>
+                                                <ul class="list-unstyled mb-0 small d-none" id="OrdersScheduledIns"></ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body p-0">
+                                    <!-- Table/Grid -->
+                                    <div class="table-bordered cursor-pointer mb-3 p-0" id="OrdersGrid">
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                            <div id="defaultMsg">
+
+                            </div>
+                            <div class="row custom-margin-dictionary mt-5 d-none" id="OrderPreviewSection">
+                                <!-- ORDER PREVIEW -->
+                                <div class="ordPrv" id="orderPreview">
+                                    <header class="ordPrv-header">
+                                        <h1 class="ordPrv-title">ORDER SUMMARY</h1>
+                                        <div class="ordPrv-topMeta">
+                                            <div><span class="ordPrv-k">Order Number:</span> <span class="ordPrv-v" id="OrderNumber">--</span></div>
+                                            <div><span class="ordPrv-k">Date:</span> <span class="ordPrv-v" id="OrderDate">--</span></div>
+                                        </div>
+                                    </header>
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- PATIENT -->
+                                    <section class="ordPrv-section">
+                                        <div class="ordPrv-line ordPrv-grid3">
+                                            <div class="ordPrv-k">Patient:</div>
+                                            <div class="ordPrv-v" id="PatientName">--</div>
+
+                                            <div class="ordPrv-k">DOB:</div>
+                                            <div class="ordPrv-v" id="DOB">--</div>
+
+                                            <div class="ordPrv-k">MRN:</div>
+                                            <div class="ordPrv-v" id="MRN">--</div>
+                                        </div>
+                                    </section>
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- PROVIDER -->
+                                    <section class="ordPrv-section">
+                                        <div class="ordPrv-line ordPrv-grid3">
+                                            <div class="ordPrv-k">Ordering Provider:</div>
+                                            <div class="ordPrv-v" id="ProviderName">--</div>
+
+                                            <div class="ordPrv-k">NPI:</div>
+                                            <div class="ordPrv-v" id="NPI">--</div>
+                                        </div>
+                                    </section>
+
+                                    <hr class="ordPrv-rule" />
+                                    <!-- ORDER SUMMARY -->
+                                    <section class="ordPrv-section">
+                                        <h2 class="ordPrv-h2">Order Summary</h2>
+                                        <!-- Host to render into -->
+                                        <div id="orderItemsHost"></div>
+                                    </section>
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- SCHEDULING -->
+                                    <!-- Right side: Service Location   -->
+                                    <section class="ordPrv-section">
+                                        <div class="ordPrv-line ordPrv-grid2">
+                                            <div class="ordPrv-k">Service Location:</div>
+                                            <div class="ordPrv-v" id="Location">--</div>
+                                        </div>
+                                    </section>
+
+                                    <!-- Right side: Documents  -->
+                                    <section class="ordPrv-section" id="ordPrv-docs-section">
+                                        <div class="ordPrv-line ordPrv-grid2">
+                                            <div class="ordPrv-k">Documents:</div>
+                                            <div class="ordPrv-v">
+                                                <ul id="orderDocsHost" class="ordPrv-docs list-unstyled mb-0"></ul>
+                                                <div id="orderDocsEmpty" class="text-muted small">No documents uploaded.</div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- FOOTER -->
+                                    <footer class="ordPrv-footer">
+                                        <div class="ordPrv-grid2 d-flex justify-content-between align-items-start flex-wrap">
+
+                                            <!-- Left Section : Submitted info -->
+                                            <div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">Submitted by:</div>
+                                                    <div class="ordPrv-v mx-2" id="SubmittedBy">--</div>
+                                                </div>
+                                                <div class="d-flex">
+                                                    <div class="ordPrv-k">Date/Time:</div>
+                                                    <div class="ordPrv-v mx-2" id="OrderDate_submit">--</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Right Section : Recurring Details -->
+                                            <div class="ms-auto   d-none" id="headerReccuring">
+                                                <div class="ordPrv-k fw-bold mb-1">Recurring Details</div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">Is Recurring:</div>
+                                                    <div class="ordPrv-v mx-2" id="IsRecurring">--</div>
+                                                </div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">Frequency:</div>
+                                                    <div class="ordPrv-v mx-2" id="RecurringFrequency">--</div>
+                                                </div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">End Date:</div>
+                                                    <div class="ordPrv-v mx-2" id="RecurringEndDate">--</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </footer>
+                                </div>
+                                <div class="cancel-info-msg d-none " id="CancelReaonInfo">
+                                    <div class="ordPrv-row">
+                                        <span class="ordPrv-k">Cancel Reason:</span>
+                                        <span class="ordPrv-v mx-2" id="valCancelReason"></span>
+                                    </div>
+
+                                    <div class="ordPrv-row">
+                                        <span class="ordPrv-k">Cancelled By:</span>
+                                        <span class="ordPrv-v mx-2" id="valCancelBy"></span>
+                                    </div>
+
+                                    <div class="ordPrv-row">
+                                        <span class="ordPrv-k">Cancel Date:</span>
+                                        <span class="ordPrv-v mx-2" id="valCancelDate"></span>
+                                    </div>
+                                </div>
+                            </div>
+      
+                         
+                            <div class="custom-margin-dictionary mt-3 d-none" id="cancelOrder">
+                                <button type="button"
+                                        id="btnCancelOrder"
+                                        data-ev="EV_Cancel_Ord"
+                                        class="custom-del-btn btn-outline-danger  "
+                                        style="border-radius:6px;">
+                                    <i class="fas fa-trash me-1" data-ev="EV_Cancel_Ord"></i> Cancel Order
+                                </button>
+                                <!-- Error Message -->
+                                <div id="orderErrorMsg" class=" pt-3 px-3 mb-0 flex-grow-1 me-3  ">
+                                    <!-- Error text dynamically inserted here -->
+                                </div>
+
+                                <div class=" pt-1 border-top mt-4 d-none" id="cancelNotesDiv">
+                                    <div class="px-2">
+                                        <h6 class="mb-0 text-primary fw-semibold">Add Cancellation Notes</h6>
+                                        <p class="mb-0 text-muted small">
+                                            Please provide a clear reason for cancelling this order.
+                                        </p>
+                                    </div>
+                                    <div class="form-group px-2">
+                                        <textarea class="form-control form-control-sm" autocomplete="off" rows="10" style="resize:vertical;min-height:40px" id="CancelNotes" placeholder="Enter Cancellation Reason"></textarea>
+                                    </div>
+                                    <div class="float-end">
+
+                                        <button type="button" id="btnSaveCancelRsn" data-ev="EV_Save_CancelRsn" class="custom-add-btn btn-light">
+                                            <i class="fas fa-times-circle " data-ev="EV_Save_CancelRsn"></i> Cancel
+                                        </button>
+                                        <button type="button" id="btnCancelRsn" data-ev="EV_SaveCancelRsn" class="custom-add-btn btn-outline-primary">
+                                            <i class="fas fa-save me-2" data-ev="EV_SaveCancelRsn"></i> Save
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card shadow-sm mb-3" id="orderScheduleMsg">
+                                    <!-- Card Header -->
+                                    <div class="card-header bg-light py-2 d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="mb-0">Add Schedule Date to the Order</h6>
+                                            <p class="text-muted mb-0">
+                                                Use this section to add the scheduled appointment date(s) to the order. Scheduled dates may be added to the entire order, or to each individual order item.
+                                            </p>
+                                        </div>
+                                        <button type="button"
+                                                id="btnScheduleOrder"
+                                                data-ev="EV_Schedule_Ord"
+                                                class="custom-del-btn btn-outline-primary"
+                                                style="border-radius:6px;">
+                                            <i class="fas fa-calendar-plus me-1" data-ev="EV_Schedule_Ord"></i> Schedule Order
+                                        </button>
+                                    </div>
+
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <!-- Dynamic content container -->
+                                        <div id="order-schedule-container" class="d-none"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+            <!-- Advanced Search Modal -->
+            <div class="modal fade" id="advancedSearchModal" tabindex="-1" role="dialog"
+                 aria-labelledby="advancedSearchLabel" aria-hidden="true"
+                 style="z-index: 9999;width: 72rem;left: 20rem;">
+
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Advanced Search</h5>
+                            <div id="errorMsgAdvSearch">
+                                
+                            </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnAdvanceCloseModel">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p>
+                                Select one or more filters from the dropdown below.
+                                To filter records, click <b>'Apply Filters'</b>.
+                            </p>
+
+                            <div class="d-flex align-items-center mb-2">
+                                <select id="ddlFilterType" class="form-control">
+                                    <option value="" selected>-Select Filter-</option>
+                                    <option value="orderNumber">Order Number</option>
+                                    <option value="orderType">Order Type</option>
+                                    <option value="orderingProviderNpi">Ordering Provider NPI</option>
+                                    <option value="patientName">Patient Name</option>
+                                    <option value="patientDOB">Patient DOB</option>
+                                    <option value="patientGender">Patient Gender</option>
+                                    <option value="patientSSN">Patient SSN</option>
+                                    <option value="requestedDos">Requested Dates of Service</option>
+                                    <option value="cptCode">CPT Codes</option>
+                                    <option value="orderStatus">Order Status</option>
+                                    <option value="serviceLocationId">Service Location Code</option>
+                                    <option value="serviceLocationName">Service Location Name</option>
+                                    <option value="clientName">Client Name</option>
+                                    <option value="submittedBy">Submitted By</option>
+                                    <option value="priority">Priority</option>
+                                </select>
+
+                                <button id="btnAddFilter" class="ml-2 custom-add-btn btn-outline-primary"
+                                        data-ev="EV_AddFilter">
+                                    <i class="fa fa-plus"></i> Add Filter
+                                </button>
+                            </div>
+
+                            <div id="filterContainer"></div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button id="btnResetAll" class="custom-del-btn btn btn-outline-danger"
+                                    data-ev="EV_ResetAll">
+                                Reset & Remove
+                            </button>
+                            <button id="btnReset" class="btn btn-outline-secondary"
+                                    data-ev="EV_ResetValues">
+                                Reset
+                            </button>
+                            <button id="btnApply" class="btn btn-primary"
+                                    data-ev="EV_ApplyFilters">
+                                Apply
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <script src="../common/js/core.js"></script>
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/flatDatePicker.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="js/Orders.js"></script>
+
+    <script src="../common/js/download.js"></script>
+    <script>
+        fetch('orderjs/orderEnteryInstructions.json')
+            .then(resp => resp.json())
+            .then(data => Core.populateInstructions(data))
+            .catch(err => console.error('Error loading instructions:', err));
+        Accordion.init('#OrdersAccordianIns');
+    </script>
+
+</body>
+
+</html>

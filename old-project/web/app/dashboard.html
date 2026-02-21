@@ -1,0 +1,215 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR-Dashboard</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+    <script src="../common/modxCore/js/chartjs.js"></script>
+    <!--Custom css-->>
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <style>
+        body,
+        html {
+            overflow-y: scroll;
+            padding-right: 0 !important;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <!--  Main wrapper -->
+            <div class="main-panel" id="divMain">
+                <div class="container-fluid py-4">
+
+                    <div class="row g-4 " id="dshBordEndUser">
+                        <!-- Order Status -->
+                        <div class="col-lg-4">
+                            <div class="dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">Order Status Overview</h6>
+                                        <p class="dshb-ui-sub">Orders categorized by their current status over the past 30 days</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbEndUserStatusBarChart">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbEndUserStatusBarChart" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Provider -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">Top Providers by Order Volume</h6>
+                                        <p class="dshb-ui-sub">Providers with the highest order volume over the past 30 days.</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbEndUserProviderPieChart">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbEndUserProviderPieChart" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Patient -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">Patients with Highest Order Volume</h6>
+                                        <p class="dshb-ui-sub">Insight into patients driving the greatest volume of clinical orders.</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbEndUserPatientPieChart">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbEndUserPatientPieChart" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appointments -->
+                        <div class="row mt-4 g-4" id="appointmentDashboardCards"></div>
+                    </div>
+
+                    <!--Supervisor/Administrator-->
+                    <div class=" row g-4 mt-3" id="dshBordSupervisorAdmin">
+                        <div class="col-lg-6 col-md-6">
+                            <div class=" dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">Top 5 Ordering Providers by Order Volume</h6>
+                                        <p class="dshb-ui-sub">Providers generating the highest number of orders based on current order status.</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbAdminStatusBarChart">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbAdminUserStatusBarChart" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-6">
+                            <div class=" dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">Top 5 Patients by Order Volume</h6>
+                                        <p class="dshb-ui-sub">Patients with the highest number of clinical orders based on current order status.</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbAdminPatientStatusBarChart">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbAdminPatientStatusBarChart" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class=" dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">Order Volume Trends — Last 90 Days</h6>
+                                        <p class="dshb-ui-sub">Displays the trend of order volume over the past 90 days, highlighting patterns and fluctuations based on order volume.</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbAdminOrderVolumeTrend">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbAdminOrderVolumeTrend" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-8 col-md-8">
+                            <div class=" dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">
+                                            Turnaround Time – Historical Comparison
+                                        </h6>
+                                        <p class="dshb-ui-sub">Displays the month-wise trend of order volume segmented by status, enabling clear comparison of processing turnaround patterns, workload distribution, and operational performance over time.</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbAdminOrderVolumeTrendByStatus">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbAdminOrderVolumeTrendByStatus" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-12 col-md-12">
+                            <div class=" dshb-ui-card">
+                                <div class="dshb-ui-header">
+                                    <div>
+                                        <h6 class="dshb-ui-title">
+                                            Turnaround Time – Last 30 Days
+                                        </h6>
+                                        <p class="dshb-ui-sub">Shows the average number of days orders spent in each status over the last 30 days, calculated based on the total duration spent in each order status.</p>
+                                    </div>
+                                    <button class="dshb-ui-icon-btn dshb-btn-refresh" data-chart="dshbAdminOrderTurnaroundTimeTrend">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                                <div class="dshb-ui-body">
+                                    <div id="dshbAdminOrderTurnaroundTimeTrend" class="dshb-chart-container"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../common/js/core.js"></script>
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="js/dashboard.js"></script>
+ 
+
+</body>
+
+</html>

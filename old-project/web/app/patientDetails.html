@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR - Patient Details</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+    <script src="../common/modxCore/js/QCGridConfiguration.js"></script>
+    <link rel="stylesheet" href="css/selectize.css" />
+    <link href="../common/css/flatDatePicker.css" rel="stylesheet" />
+    <!--Custom css-->
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        body,
+        html {
+            overflow: scroll;
+            padding-right: 0 !important;
+        }
+
+        .content-wrapper {
+            padding: 6px !important;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .navbar .navbar-menu-wrapper {
+        }
+
+        .btn-link-table {
+            font-weight: bold !important;
+            border: none !important;
+            color: dodgerblue !important;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--bs-nav-tabs-link-active-color);
+            background-color: var(--bs-nav-tabs-link-active-bg);
+            border-color: var(--bs-nav-tabs-link-active-border-color);
+            border-radius: 0;
+            border: 1px solid #dee2e6;
+            padding: 0.75rem 1.5rem;
+            font-size: 13px
+        }
+
+            .nav-tabs .nav-link.active,
+            .nav-tabs .nav-item.show .nav-link {
+                color: var(--text-color);
+                background-color: var(--accent-color);
+                border-color: transparent transparent #f3f3f3;
+                border-bottom: 2px solid !important;
+                font-size: 13px;
+                font-weight: bold;
+            }
+
+            .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+                border-color: #e9ecef #e9ecef #dee2e6;
+            }
+
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .tab-content {
+            border: none;
+        }
+        /* Footer will stay at the bottom */
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+ 
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <div id="includeTopMenu"></div>
+        <div class="container-fluid page-body-wrapper ">
+            <div id="includeLeftMenu"></div>
+            <!--  Main wrapper -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class=" menuDiv  ">
+
+                        <div class="card border-0 rounded-0 shadow-none mb-0 px-0  " id="managePatientDetails">
+
+                            <div class="control-section card-header bg-light mt-4  px-3 rounded-0 d-flex align-items-center justify-content-between flex-wrap">
+
+                                <!-- Left: Title & Subtitle -->
+                                <div class="mb-2 mb-md-0">
+                                    <h4 class="gridHeader mb-1">
+                                        <i class="fa-regular fa-user me-2 text-primary"></i> Manage Patient Details
+                                    </h4>
+                                    <p class="text-muted small mb-0">
+                                        View and manage the patient.
+                                    </p>
+                                </div>
+
+                                <!-- Right: Filters & Add Button -->
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="d-flex flex-column">
+                                            <label for="selActive" class=" fw-semibold">Client</label>
+                                            <select class="form-select form-select-sm" data-model-prop="ClientID" id="inpOrderClient" data-ev="EV_OnChangeClient" style="width:100px">
+                                                <option value="">Client</option>
+                                            </select>
+                                        </div>
+                                        <!-- Facility Search -->
+                                        <div class="fi facility-search position-relative mb-2">
+                                            <label for="facilitySearch" class="fw-semibold">Facility</label>
+
+                                            <input type="text"
+                                                   id="facilitySearch"
+                                                   class="form-control form-control-sm facility-input"
+                                                   placeholder="Select facility"
+                                                   autocomplete="off" />
+
+                                            <ul id="facilityDropdown"
+                                                class="facility-dropdown list-group d-none"
+                                                role="listbox">
+
+                                                <!-- Inner Search -->
+                                                <li class="list-group-item facility-inner-search">
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="text"
+                                                               id="facilityInnerSearch"
+                                                               class="form-control"
+                                                               placeholder="Search facility..." autocomplete="off" />
+                                                        <button type="button"
+                                                                id="clearFacilitySearch"
+                                                                class="facility-clear-btn"
+                                                                aria-label="Clear search">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </li>
+
+                                                <!-- Loader -->
+                                                <li id="facilityLoader"
+                                                    class="list-group-item facility-loader d-none">
+                                                    <span class="spinner-border spinner-border-sm text-primary"></span>
+                                                    <span class="ms-2">Searching facilities...</span>
+                                                </li>
+
+                                                <!-- Results injected dynamically -->
+                                            </ul>
+                                        </div>
+        
+                                    </div>
+
+
+
+                                    <!-- Search By Filter -->
+                                    <div class="d-flex flex-column">
+                                        <label for="selSearch" class="fw-semibold">Search By</label>
+                                        <select class="form-control" id="selSearch" data-ev="EV_SelSearch" style="width:100px">
+                                            <option value="">Select</option>
+                                            <option value="AccountNumber">Account Number</option>
+                                            <option value="PatientName">Patient Name</option>
+                                            <option value="MRN">MRN</option>
+                                            <option value="SSN">SSN</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="d-flex flex-column">
+                                        <!-- Search Textbox -->
+                                        <label for="inpSearch" class="fw-semibold">Search Value</label>
+                                        <input type="text" class="form-control form-control-sm" id="inpSearch"
+                                               placeholder="Enter search term" autocomplete="off" style="width:170px">
+
+
+                                    </div>
+                                    <!-- Search Button -->
+                                    <button class="custom-add-btn btn-primary mb-0" data-ev="EV_Search">
+                                        Search
+                                    </button>
+                                </div>
+
+
+                                <!-- Right: Add Button -->
+                                <button class="custom-add-btn btn-primary mb-0 d-flex align-items-center gap-1  "
+                                        id="btnFacilityService"
+                                        data-ev="EV_AddPatient"
+                                        data-toggle="tooltip"
+                                        title="Add Patient">
+                                    <i data-ev="EV_AddPatient" class="fa fa-plus"></i> Add Patient
+                                </button>
+                            </div>
+
+                        </div>
+                        <div id="selFileterMsg">
+
+                        </div>
+                        <div id="PatientDetailsAccordianIns" class="  mt-0 mb-1" data-single-open="true">
+                            <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <!-- Accordion Header Button -->
+                                    <button class="ord-acc-header flex-grow-1 text-start   border-0" id="ordAcc_hdr_0_0" type="button"
+                                            aria-expanded="true" aria-controls="ordAcc_panel_0_0">
+                                        <div class="card-header   d-flex align-items-center">
+                                            <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                            <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                        </div>
+                                        <span class="ord-acc-icons">
+                                            <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+
+
+                                <!-- Accordion Panel -->
+                                <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" style="max-height:230px;">
+                                    <div class="ord-acc-inner pt-1 p-3">
+                                        <ul class="list-unstyled mb-0 small" id="PatientDetailsIns"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body pt-0 px-0">
+                            <div id="ClientNoMsg" class="d-none" style="margin-left:200px">
+                            </div>
+                            <div class="table-bordered cursor-pointer mb-3" id="PatientDetailsGrid">
+                                <!-- Grid content -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patient Details Sub Menu-->
+                    <nav class="mt-3 d-flex justify-content-between">
+                        <div class="nav nav-tabs menuDiv d-none " id="patient-tab" role="tablist">
+                            <!-- Patient Demographics -->
+                            <a class="nav-item nav-link active" id="nav-demographics-tab" data-toggle="tab" href="#nav-demographics" role="tab" aria-controls="nav-demographics" aria-selected="true" data-ev="Ev_showDemographics">
+                                <i class="fa-solid fa-id-card mr-2"></i>
+                                Patient Demographics
+                            </a>
+                            <!-- Patient Insurance -->
+                            <a class="nav-item nav-link" id="nav-insurance-tab" data-toggle="tab" href="#nav-insurance" role="tab" aria-controls="nav-insurance" aria-selected="false" data-ev="Ev_showPatientInsurance">
+                                <i class="fa-solid fa-file-invoice-dollar mr-2" data-ev="Ev_showPatientInsurance"></i> Patient Insurance
+
+                            </a>
+                            <!-- Patient Diagnosis -->
+                            <a class="nav-item nav-link" id="nav-diagnosis-tab" data-toggle="tab" href="#nav-diagnosis" role="tab" aria-controls="nav-diagnosis" aria-selected="false" data-ev="Ev_showDiagnosis">
+                                <i class="fa-solid fa-notes-medical mr-2" data-ev="Ev_showDiagnosis"></i> Patient Diagnosis
+                            </a>
+                            <!-- Patient Procedures -->
+                            <a class="nav-item nav-link" id="nav-procedures-tab" data-toggle="tab" href="#nav-procedures" role="tab" aria-controls="nav-procedures" aria-selected="false" data-ev="Ev_showProcedure">
+                                <i class="fa-solid fa-stethoscope mr-2" data-ev="Ev_showProcedure"></i> Patient Procedures
+                            </a>
+
+
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="patient-tabContent">
+                        <div class="tab-pane fade show active px-0 pt-0" id="nav-demographics" role="tabpanel" aria-labelledby="nav-demographics-tab">
+                            <!-- Content for Patient Procedures goes here -->
+                            <div class="table-bordered cursor-pointer mb-3 " id="PatientDemographicsGrid">
+                                <!-- Grid content -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show px-0 pt-0" id="nav-procedures" role="tabpanel" aria-labelledby="nav-procedures-tab">
+                            <!-- Content for Patient Procedures goes here -->
+                            <div class="table-bordered cursor-pointer mb-3 " id="PatientProceduresGrid">
+                                <!-- Grid content -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade px-0 pt-0" id="nav-diagnosis" role="tabpanel" aria-labelledby="nav-diagnosis-tab">
+                            <!-- Content for Patient Diagnosis goes here -->
+                            <div class="table-bordered cursor-pointer mb-3 " id="PatientDiagnosisGrid">
+                                <!-- Grid content -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade px-0 pt-0" id="nav-insurance" role="tabpanel" aria-labelledby="nav-insurance-tab">
+                            <!-- Content for Patient Insurance goes here -->
+                            <div class="table-bordered cursor-pointer mb-3 " id="PatientInsuranceGrid">
+                                <!-- Grid content -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 mb-2 d-none" id="patient-history-tab">
+                        <div class="nav nav-tabs menuDiv" role="tablist">
+                            <!-- Patient Demographics History -->
+                            <a class="nav-item nav-link active d-none" id="nav-demographics-history-tab" data-toggle="tab" href="#nav-demographics-history" role="tab" aria-controls="nav-demographics-history" aria-selected="true" data-ev="Ev_showDemographicsHistory">
+                                <i class="fa-solid fa-id-card-clip mr-2" data-ev="Ev_showDemographicsHistory"></i> Demographics History
+                            </a>
+                            <!-- Patient Insurance History -->
+                            <a class="nav-item nav-link active d-none" id="nav-insurance-history-tab" data-toggle="tab" href="#nav-insurance-history" role="tab" aria-controls="nav-insurance-history" aria-selected="false" data-ev="Ev_showPatientInsuranceHistory">
+                                <i class="fa-solid fa-file-invoice-dollar mr-2"></i> Insurance History
+                            </a>
+                        </div>
+
+                        <div class="tab-content" id="patient-tabContent">
+                            <div class="tab-pane fade show active px-0 pt-0" id="nav-demographics-history" role="tabpanel" aria-labelledby="nav-demographics-history-tab">
+                                <div class="table-bordered cursor-pointer mb-3" id="PatientDemographicsHistoryGrid"></div>
+                            </div>
+                            <div class="tab-pane fade show active px-0 pt-0" id="nav-insurance-history" role="tabpanel" aria-labelledby="nav-insurance-history-tab">
+                                <div class="table-bordered cursor-pointer mb-3" id="PatientInsuranceHistoryGrid"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Patient demographics-->
+                <div id="divPatientDemographics" class="col-lg-5 col-md-8 col-sm-12 pt-3 p-3 bg-white in-tkt-modelCntr d-none" data-model="PatientDemographicsMeta">
+                    <div class="mngFaclit-header position-relative">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="mb-1">Patient Details</h5>
+                                <p class="mb-0 text-muted small">
+                                    Add or Update Patient Demographics.
+                                </p>
+                            </div>
+                            <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_ClosePatientDemographics"></button>
+                        </div>
+                        <div id="divValidateMsgDemo" class="error-message mt-2 w-100" style="display: none;"></div>
+                    </div>
+                    <fieldset class="facility-fieldset border p-2 rounded mb-2">
+                        <legend class="float-none w-auto px-2">Patient Details</legend>
+                        <input id="PatientDetailID" data-model-prop="PatientDetailID" class="d-none" />
+                        <input id="PatientDemographicsID" data-model-prop="PatientDemographicsID" class="d-none" />
+                        <div class="row mb-2">
+                            <div class="form-group col-md-6">
+                                <label>MRN</label>
+                                <input type="text" class="form-control form-control-sm " maxlength="10" data-model-prop="MRN" id="inpMRN">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Account Number </label>
+                                <input type="text" class="form-control form-control-sm " maxlength="15" data-model-prop="AccountNumber" id="inpAccountNumber">
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="form-group col-md-4">
+                                <label>First Name<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" maxlength="40" data-model-prop="PatientFirstName" id="inpPatientFirstName">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Middle Initial</label>
+                                <input type="text" class="form-control form-control-sm" maxlength="40" data-model-prop="PatientMiddle">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Last Name<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" maxlength="40" data-model-prop="PatientLastName" id="inpPatientLastName">
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="form-group col-md-4">
+                                <label>Date of Birth<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm dt" data-model-prop="PatientDOB" placeholder="mm/dd/yyyy" id="inpPatientDOB">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>SSN<span class="text-danger">*</span></label>
+                                <input type="text"
+                                       class="form-control form-control-sm"
+                                       maxlength="11"
+                                       data-model-prop="PatientSSN"
+                                       id="inpPatientSSN"
+                                       placeholder="XXX-XX-XXXX"
+                                       pattern="\d{3}-\d{2}-\d{4}"
+                                       title="Enter a valid SSN (XXX-XX-XXXX)"
+                                       oninput="Core.formatSSN(this)">
+
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Gender<span class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" data-model-prop="PatientGender" id="inpPatientGender">
+                                    <option value="">Select</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="form-group col-md-6">
+                                <label>Phone Number<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm " maxlength="15" data-model-prop="PatientPhoneNumber" id="inpPatientPhoneNumber" title="Only numeric values allowed" oninput="Core.formatPhone(this)">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Email <span class="text-danger">*</span></label>
+                                <input type="email" maxlength="80" class="form-control form-control-sm" id="inpPatientEmail" autocomplete="off" data-model-prop="PatientEmail">
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="form-group col-md-6">
+                                <label>Address 1<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" maxlength="60" data-model-prop="PatientAddress1" id="inpPatientAddress1">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Address 2</label>
+                                <input type="text" class="form-control form-control-sm" maxlength="60" data-model-prop="PatientAddress2" id="inpAddress2">
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="form-group col-md-6">
+                                <label>City<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" maxlength="30" data-model-prop="PatientCity" id="inpPatientCity">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>State<span class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" id="inpPatientState" data-model-prop="PatientState" style="height:28px">
+                                    <option disabled selected>Select state</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+
+                            <div class="form-group col-md-6">
+                                <label>Zip<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm  " maxlength="10" data-model-prop="PatientZip" id="inpPatientZip" pattern="\d*" inputmode="numeric" title="Only numeric values allowed" oninput="Core.formatZipCode(this)">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Spouse Name</label>
+                                <input type="text" class="form-control form-control-sm" maxlength="40" data-model-prop="SpouseName" id="inpSpouseName">
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="d-flex justify-content-between align-items-center mt-2 mb-1">
+                        <!-- Back / Next Arrows -->
+                        <div class="d-none btnPatientFormNavigation">
+                            <button class="custom-add-btn btn-outline-info me-2" title="Back" aria-label="Back" style="cursor:not-allowed" disabled>
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <button class="custom-add-btn btn-outline-info" data-ev="EV_ShowPatientInsuranceform" title="Next" aria-label="Next">
+                                <i class="fas fa-arrow-right" data-ev="EV_ShowPatientInsuranceform"></i>
+                            </button>
+                        </div>
+
+                        <!-- Save and Next Button -->
+                        <button class="custom-add-btn btn-primary custom-add-btn d-flex align-items-center" data-ev="EV_Save_PatientDemographics" id="btnPatientDemographics">
+                            <i class="fas fa-save me-2"></i>
+                            Save and Next
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!--Patient Insurance-->
+                <div id="divPatientInsurance" class="col-lg-5 col-md-8 col-sm-12 pt-3 p-3 bg-white in-tkt-modelCntr d-none" data-model="PatientInsuranceMeta">
+                    <div class="mngFaclit-header position-relative">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="mb-1">Patient Insurance</h5>
+                                <p class="mb-0 text-muted small">
+                                    Add or Update Patient Insurance.
+                                </p>
+                            </div>
+                            <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_ClosePatientInsuracne"></button>
+                        </div>
+                        <div id="divValidatePatiIns" class="error-message mt-2 w-100" style="display: none;"></div>
+                    </div>
+                    <!-- Policy/Plan Info -->
+                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                        <legend class="float-none w-auto px-2">Policy / Plan Info</legend>
+                        <input disabled id="PatientDetailIDInsurance" data-model-prop="PatientDetailID" class="d-none" />
+                        <input disabled id="PatientInsuranceID" data-model-prop="PatientInsuranceID" class="d-none" />
+
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12 d-flex align-items-center">
+                                <label for="chkDirectBill" class="mb-0 mr-2 font-weight-semibold text-dark">
+                                    Direct Bill To Patient
+                                </label>
+                                <input id="chkDirectBill" type="checkbox" class="form-check-input ml-2 mx-2" data-ev="Ev_CheckedDirectBillToMemb">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Insurance Type  </label>
+                                <select class="form-select form-select-sm" data-model-prop="InsuranceType" id="inpInsuranceType">
+                                    <option value="">Select</option>
+                                    <option value="Commercial">Commercial</option>
+                                    <option value="Government">Government</option>
+                                    <option value="Medicaid">Medicaid</option>
+                                    <option value="Medicare">Medicare</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>CoInsurance Type</label>
+                                <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="CoInsuranceType" id="inpCoInsuranceType" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Insurance Priority <span class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" data-model-prop="InsurancePriority" id="inpInsurancePriority">
+                                    <option value="">Select</option>
+                                    <option value="Primary">Primary</option>
+                                    <option value="Secondary">Secondary</option>
+                                    <option value="Tertiary">Tertiary</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Plan Type <span class="text-danger">*</span></label>
+
+                                <select class="form-select form-select-sm" data-model-prop="PlanType" id="inpPlanType">
+                                    <option value="">Select</option>
+                                    <option value="HMO">HMO</option>
+                                    <option value="PPO">PPO</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Insurance Plan ID <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="InsurancePlanID" id="inpInsurancePlanID" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Insurance Plan Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="InsurancePlanName" id="inpInsurancePlanName">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Policy Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="PolicyNumber" id="inpPolicyNumber">
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                    <!-- Government IDs -->
+                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                        <legend class="float-none w-auto px-2">Government IDs</legend>
+                        <div class="row">
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <label>Medicare No</label>
+                                <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="MedicareNo" id="inpMEDICARENO" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <label>Medicaid No</label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="MedicaidNo" id="inpMedicaidNo">
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <label>Medicare Carrier <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="MedicareCarrier" id="inpMedicareCarrier">
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <label>MBI <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="MBI" id="inpMBI">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Member/Subscriber Info -->
+                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                        <legend class="float-none w-auto px-2">Member / Subscriber Info</legend>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Member ID</label>
+                                <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="MemberId" id="inpMemberId" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Subscriber ID</label>
+                                <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="SubscriberId" id="inpSubscriberId" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Member Relationship <span class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" data-model-prop="MemberRelationship" id="inpMemberRelationship">
+                                    <option value="">Select</option>
+                                    <option value="Child">Child</option>
+                                    <option value="Father">Father</option>
+                                    <option value="Mother">Mother</option>
+                                    <option value="Self">Self</option>
+                                    <option value="Spouse">Spouse</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Eligibility Status <span class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" data-model-prop="EligibilityStatus" id="inpEligibilityStatus">
+                                    <option value="">Select</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">InActive</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Eligibility Start Date <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm dt" data-model-prop="EligibilityStartDate" id="inpEligibilityStartDate" placeholder="mm/dd/yyyy">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Eligibility End Date <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm dt" data-model-prop="EligibilityEndDate" id="inpEligibilityEndDate" placeholder="mm/dd/yyyy">
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+                    <!-- Group/Employer Info -->
+                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                        <legend class="float-none w-auto px-2">Group / Employer Info</legend>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Group Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="GroupNumber" id="inpGroupNumber">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Group Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="GroupName" id="inpGroupName">
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+                    <!-- Insurance Company Info -->
+                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                        <legend class="float-none w-auto px-2">Insurance Company Info</legend>
+                        <div class="row">
+
+                            <div class="form-group col-lg  col-md-6 col-sm-12">
+                                <label>Insurance Company Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="InsuranceCompanyName" id="inpInsuranceCompanyName">
+                            </div>
+                            <div class="form-group col-lg col-md-6 col-sm-12">
+                                <label>Insurance Co Phone Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="InsuranceCoPhoneNumber" id="inpInsuranceCoPhoneNumber" title="Only numeric values allowed" oninput="Core.formatPhone(this)">
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+                    <!-- Primary Insured Info -->
+                    <fieldset class="facility-fieldset border p-2 rounded mb-3" data-model="PrimaryInsuredMeta">
+                        <legend class="float-none w-100 px-2 d-flex justify-content-between align-items-center mb-0">
+                            <span class="float-none w-auto px-2  ">Primary Insured</span>
+                            <span class="form-check mb-0">
+                                <input class="form-check-input" type="checkbox" id="chkSameAsPatient" data-ev="Ev_SameAsPatient">
+                                <label class="float-none w-auto px-2  " for="chkSameAsPatient">
+                                    Same as the Patient
+                                </label>
+                            </span>
+                        </legend>
+
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>First Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredFName" id="inpPrimaryInsuredFName">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Last Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredLName" id="inpPrimaryInsuredLName">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Middle Name </label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredMName" id="inpPrimaryInsuredMName">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Relationship <span class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" data-model-prop="PrimaryInsuredRelationship" id="inpPrimaryInsuredRelationship">
+                                    <option value="">Select</option>
+                                    <option value="Child">Child</option>
+                                    <option value="Father">Father</option>
+                                    <option value="Mother">Mother</option>
+                                    <option value="Self">Self</option>
+                                    <option value="Spouse">Spouse</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>DOB <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm dt" data-model-prop="PrimaryInsuredDOB" id="inpPrimaryInsuredDOB" placeholder="mm/dd/yyyy">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Street Address 1 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredStreetAddress1" id="inpPrimaryInsuredStreetAddress1">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Street Address 2</label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredStreetAddress2" id="inpPrimaryInsuredStreetAddress2">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>City <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredAddressCity" id="inpPrimaryInsuredAddressCity">
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>State <span class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" id="inpPrimaryInsuredAddressState" data-model-prop="PrimaryInsuredAddressState" style="height:28px">
+                                    <option disabled selected>Select state</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                <label>Zip <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm  " data-model-prop="PrimaryInsuredAddressZip" id="inpPrimaryInsuredAddressZip" maxlength="10" inputmode="numeric" title="Only numeric values allowed" oninput="Core.formatZipCode(this)">
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+                    <div class="d-flex justify-content-between align-items-center mt-2 mb-1">
+                        <!-- Back / Next Arrows -->
+                        <div class="d-none btnPatientFormNavigation">
+                            <button class="custom-add-btn btn-outline-info me-2" data-ev="EV_ShowPatientDemographicsform" title="Back" aria-label="Back">
+                                <i class="fas fa-arrow-left" data-ev="EV_ShowPatientDemographicsform"></i>
+                            </button>
+                            <button class="custom-add-btn btn-outline-info" title="Next" aria-label="Next" style="cursor:not-allowed" disabled>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Save and Next Button -->
+                        <button class="custom-add-btn btn-primary" data-ev="EV_Save_PatientInsurance">
+                            <i class="fas fa-save mr-1" data-ev="EV_Save_PatientInsurance"></i>
+                            Save and Next
+                        </button>
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="wizard-success-animate text-center py-5 in-tkt-modelCntr col-lg-4 col-md-4 col-sm-12 pt-3 bg-white d-none" id="PatientSubmitMsg">
+                    <div class="mngFaclit-header position-relative">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+
+                            </div>
+                            <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_ClosePatientSucessMsg"></button>
+                        </div>
+
+                    </div>
+                    <span class="fa-stack fa-2x success-icon-animate mb-3">
+                        <i class="fa-solid fa-circle fa-stack-2x text-success" style="opacity:0.16;"></i>
+                        <i class="fa-solid fa-check fa-stack-1x text-success"></i>
+                    </span>
+                    <h4 class="fw-bold mt-2 mb-2" style="letter-spacing:.01em;">Patient Details Saved!</h4>
+                    <div class="mb-2 text-muted" style="font-size:1.02rem;">
+                        Patient information has been <span class="text-success fw-semibold">successfully saved</span>.
+                    </div>
+
+                    <button class="btn btn-primary btn-sm px-3 mt-3" onclick="PatientDetails.togglePatientSections('divPatientDemographics','Add')" data-ev="Ev_AddAontherPatient">
+                        <i class="fa fa-plus me-1" data-ev="Ev_AddAontherPatient"></i> Add Another Patient
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+ 
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/js/core.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="../common/js/bootstrap-datepicker.min.js"></script>
+    <script src="js/patientDetails.js"></script>
+
+    <script src="../common/js/flatDatePicker.js"></script>
+    <script>
+        $(document).on('input', 'input[type="text"].numeric-only', function () {
+            this.value = (this.value || '').replace(/\D/g, '');
+        });
+    </script>
+    <script>
+        fetch('orderjs/orderEnteryInstructions.json')
+            .then(resp => resp.json())
+            .then(data => Core.populateInstructions(data))
+            .catch(err => console.error('Error loading instructions:', err));
+        Accordion.init('#PatientDetailsAccordianIns');
+    </script>
+</body>
+
+</html>

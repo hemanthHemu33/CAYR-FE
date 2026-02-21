@@ -1,0 +1,67 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR-Login</title>
+    <link rel="shortcut icon" type="image/png" href="../common/theme/assets/images/logos/favicon1.png" />
+
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+ 
+    <link href="css/app.css" rel="stylesheet" />
+    <style>
+        .form-control {  
+            padding: 0.45rem 0.6rem;
+            border-radius: 3px;
+            min-height: 42px;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <!--  Body Wrapper -->
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 mx-auto" id="divMain">
+                        <div class="auth-form-light text-left py-5 px-4 px-sm-5 shadow" data-model="userMeta">
+                            <div class="brand-logo1">
+                                CAYR
+                            </div>
+                            <h4>Hello! let's get started</h4>
+                            <h6 class="fw-light">Sign in to continue.</h6>
+                            <div class="form-group">
+                                <input type="email" class="form-control form-control-lg" placeholder="Username" data-model-prop="UserName">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-lg" placeholder="Password" data-model-prop="Password">
+                            </div>
+                            <div class="mt-3">
+                                <button id="btnLogin" type="button" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" data-ev="EV_LOGIN" style=" margin-left: 0px;">Sign In</button>
+                            </div>
+                            <!--<a href="dashboard.html">dashboard.html</a>-->
+                            <h5 id="error" style="color: red;">&nbsp;</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/login.js"></script>
+</body>
+
+</html>

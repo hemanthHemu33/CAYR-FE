@@ -1,0 +1,326 @@
+{
+  "PatientInformation": {
+    "ulId": "PatientInfo",
+    "steps": [
+      {
+        "icon": "fa-users text-info",
+        "instruction": "To search for a patient record, select the Client, Facility, and Patient Indicators."
+      },
+      {
+        "icon": "fa-magnifying-glass text-primary",
+        "instruction": "Once the patient record(s) are displayed, double-click the appropriate record to select it."
+      },
+      {
+        "icon": "fa-id-card text-primary",
+        "instruction": "Upload the patient identification documents, if available. Accepted forms include a driver's license or passport."
+      },
+      {
+        "icon": "fa-pen-to-square text-success",
+        "instruction": "Make any necessary changes to the patient's information."
+      },
+      {
+        "icon": "fa-circle-check text-primary",
+        "instruction": "Press Save and Next to continue."
+      }
+    ]
+  },
+
+  "PatientInsurance": {
+    "ulId": "PatientInsurance",
+    "steps": [
+      {
+        "icon": "fa-file-medical text-warning",
+        "instruction": "Please review the patient's insurance information for accuracy and completeness. Add any missing details or update outdated/incorrect information as needed."
+      },
+      {
+        "icon": "fa-credit-card text-primary",
+        "instruction": "Upload the patient's health insurance card, if available. Include both the front and back of the card."
+      },
+      {
+        "icon": "fa-circle-check text-primary",
+        "instruction": "Press Save and Next to continue."
+      }
+    ]
+  },
+
+  "ProviderInformation": {
+    "ulId": "ProviderInformation",
+    "steps": [
+      {
+        "icon": "fa-magnifying-glass text-primary",
+        "instruction": "Search for the Ordering Physician by name or NPI.Press Save and Next to continue."
+      }
+    ]
+  },
+
+  "ServiceLocation": {
+    "ulId": "ServiceLocation",
+    "steps": [
+      {
+        "icon": "fa-bed-pulse text-primary",
+        "instruction": "If appropriate, enter the patient's unit, room, and bed location. Press Save and Next to continue."
+      }
+    ]
+  },
+
+  "OrderInformation": {
+    "ulId": "OrderInformation",
+    "steps": [
+      {
+        "icon": "fa-plus text-success",
+        "instruction": "To order a service, click on the + Add Order Item button and enter the required information."
+      },
+      {
+        "icon": "",
+        "instruction": "You have the option to submit a recurring order or order items."
+      },
+      {
+        "icon": "fa-arrows-rotate text-warning",
+        "instruction": "To make the entire order recurring, check the Repeat Order box and input the frequency and order end date."
+      },
+      {
+        "icon": "fa-retweet text-info",
+        "instruction": "To make a specific service or services recurring, in the order item section, check the Recurring box and input the frequency and order end date."
+      },
+      {
+        "icon": "fa-floppy-disk text-success",
+        "instruction": "Click on the green icon to save the order item, or click on the red delete icon to remove it from the order. Repeat these steps for each additional service."
+      },
+      {
+        "icon": "fa-eye text-primary",
+        "instruction": "Once all order items have been added, click on Save and Preview to view your order summary. You will have the option to return to this screen to make changes prior to submitting your order."
+      },
+      {
+        "icon": "fa-paperclip text-primary",
+        "instruction": "Click on Attach Document to upload the ordering physician's prescription order. Acceptable file formats are png, jpg, jpeg, and pdf, with a maximum file size of 20 MB."
+      }
+    ]
+  },
+  "ClientInstruction": {
+    "ulId": "ClientIns",
+    "steps": [
+      {
+        "icon": "fa-bed-pulse text-primary",
+        "instruction": "To add a new client record, click the \"Add Client\" button and enter the required information."
+      },
+      {
+        "icon": "fa-table text-success",
+        "instruction": "To view or modify an existing client record, double-click the desired client row in the table."
+      },
+      {
+        "icon": "fa-hospital-user text-info",
+        "instruction": "To view or modify facility assignments, double-click the Client Name hyperlink."
+      },
+      {
+        "icon": "fa-circle-check text-primary",
+        "instruction": "After making changes, click \"Save\" to update the client record and continue."
+      }
+    ]
+  },
+  "CPTServiceInstruction": {
+    "ulId": "CPTServiceIns",
+    "steps": [
+      {
+        "icon": "fa-file-medical text-primary",
+        "instruction": "View CPT codes along with their descriptions and the services associated with each CPT."
+      }
+    ]
+  },
+
+  "FacilityInstruction": {
+    "ulId": "FacilityIns",
+    "steps": [
+      {
+        "icon": "fa-hospital text-primary",
+        "instruction": "To assign a new facility to the selected client, click the \"Add Facility\" button and enter the required information."
+      },
+      {
+        "icon": "fa-building-circle-check text-success",
+        "instruction": "To view or modify an existing facility record, double-click the desired facility row in the table."
+      },
+      {
+        "icon": "fa-circle-check text-primary",
+        "instruction": "After completing any updates, click \"Save\" to confirm and continue."
+      }
+    ]
+  },
+  "PatientDetailsInstruction": {
+    "ulId": "PatientDetailsIns",
+    "steps": [
+      {
+        "icon": "fa-user-plus text-primary",
+        "instruction": "Select a Client and Facility to view the list of associated patient records. If the patient record is not found, click the \"Add Patient\" button, enter the required information, and click \"Save\"."
+      },
+      {
+        "icon": "fa-user-edit text-success",
+        "instruction": "To modify patient details, double-click on the desired patient record. After making changes, click \"Save\" to update the record and continue."
+      },
+      {
+        "icon": "fa-id-badge text-info",
+        "instruction": "To view additional patient demographics, double-click on the Patient Number hyperlink. Double-click on any row to view the history of changes made."
+      }
+    ]
+  },
+  "ServicesInstruction": {
+    "ulId": "ServicesIns",
+    "steps": [
+      {
+        "icon": "fa-list-alt text-primary",
+        "instruction": "To add a new service category, click the \"Add Service Type\" button and enter the required information."
+      },
+      {
+        "icon": "fa-edit text-success",
+        "instruction": "To view or modify an existing service category, double-click on the desired row in the table."
+      },
+      {
+        "icon": "fa-link text-info",
+        "instruction": "To add or modify detailed services for each category, click on the Service Name hyperlink."
+      }
+    ]
+  },
+  "ServiceDetailsInstruction": {
+    "ulId": "ServiceDetailsIns",
+    "steps": [
+      {
+        "icon": "fa-plus-circle text-primary",
+        "instruction": "To add a new service, click the \"Add Service Detail\" button and enter the required information."
+      },
+      {
+        "icon": "fa-pen text-success",
+        "instruction": "To view or modify an existing service, double-click on the desired row in the table."
+      }
+    ]
+  },
+  "ServiceCPTMapInstruction": {
+    "ulId": "ServiceCPTMapIns",
+    "steps": [
+      {
+        "icon": "fa-plus-circle text-primary",
+        "instruction": "To add a new cpt, click the \"Add CPT\" button and enter the required information."
+      },
+      {
+        "icon": "fa-pen text-success",
+        "instruction": "To view or modify an existing cpt, double-click on the desired row in the table."
+      }
+    ]
+  },
+  "OrdersDraftInstruction": {
+    "ulId": "OrdersDraftIns",
+    "steps": [
+      {
+        "icon": "fa-file-alt text-primary",
+        "instruction": "To view an order, double-click on the Order Number."
+      },
+      {
+        "icon": "fa-edit text-success",
+        "instruction": "To modify an order, click on the edit icon in the Action column."
+      }
+    ]
+  },
+  "OrdersSubmittedInstruction": {
+    "ulId": "OrdersSubmittedIns",
+    "steps": [
+      {
+        "icon": "fa-file-alt text-primary",
+        "instruction": "To view an order, double-click on the Order Number."
+      },
+      {
+        "icon": "fa-calendar-check text-success",
+        "instruction": "To add a scheduled appointment date to the order, click the \"Schedule Order\" button."
+      },
+      {
+        "icon": "fa-calendar-times text-danger",
+        "instruction": "To add a cancel date for the order, double-click on the Order Number and add the cancellation reason to complete the record."
+      }
+
+    ]
+  },
+  "OrdersAllInstruction": {
+    "ulId": "OrdersAllIns",
+    "steps": [
+      {
+        "icon": "fa-file-alt text-primary",
+        "instruction": "To view an order, double-click on the Order Number."
+      }
+    ]
+  },
+  "OrdersScheduledInstruction": {
+    "ulId": "OrdersScheduledIns",
+    "steps": [
+      {
+        "icon": "fa-file-alt text-primary",
+        "instruction": "To view an order, double-click on the Order Number."
+      },
+      {
+        "icon": "fa-ban text-danger",
+        "instruction": "To cancel an order, click the \"Cancel Order\" button. You may cancel an order for any reason up to 48 hours prior to the scheduled appointment date."
+      }
+
+    ]
+  },
+  "OrdersCancelledInstruction": {
+    "ulId": "OrdersCancelledIns",
+    "steps": [
+      {
+        "icon": "fa-file-alt text-primary",
+        "instruction": "Double-click on a cancelled order to view the order contents."
+      }
+    ]
+  },
+  "FacilityServicesInstruction": {
+    "ulId": "FacilityServicesIns",
+    "steps": [
+      {
+        "icon": "fa-hand-holding-medical text-primary",
+        "instruction": "For each client facility, assign a list of services provided at or by that facility."
+      },
+      {
+        "icon": "fa-building text-success",
+        "instruction": "After selecting the client, double-click on the facility name to view the list of services associated with the selected facility."
+      }
+    ]
+  },
+  "FacilityServiceDetailsInstruction": {
+    "ulId": "FacilityServiceDetailsIns",
+    "steps": [
+      {
+        "icon": "fa-plus-circle text-primary",
+        "instruction": "To add a new service record, click the \"Add Service\" button and enter the required information."
+      },
+      {
+        "icon": "fa-edit text-success",
+        "instruction": "To view or modify an existing record, double-click the desired row in the table. After making changes, click \"Save\" to update the list of services assigned to the selected facility."
+      }
+    ]
+  },
+  "FacilityAvlMapInstruction": {
+    "ulId": "FacilityAvlMap",
+    "steps": [
+      {
+        "icon": "fa-plus-circle text-primary",
+        "instruction": "Click the “Manage Availability” button to create a new availability record and fill in the required information."
+      },
+      {
+        "icon": "fa-clock text-primary",
+        "instruction": "Select the appropriate weekday and specify the start and end time for which the service should be available."
+      },
+      {
+        "icon": "fa-layer-group text-primary",
+        "instruction": "You can add multiple availability slots for the same day if the service operates in separate time frames."
+      },
+      {
+        "icon": "fa-edit text-primary",
+        "instruction": "To update an existing record, click on the relevant entry and modify the details as needed."
+      },
+      {
+        "icon": "fa-trash text-danger",
+        "instruction": "Use the delete option to remove an availability slot that is no longer required."
+      },
+      {
+        "icon": "fa-circle-check text-success",
+        "instruction": "Click the Save button after creating or updating availability to ensure your changes are applied."
+      }
+    ]
+  }
+
+}

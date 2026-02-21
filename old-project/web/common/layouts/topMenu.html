@@ -1,0 +1,39 @@
+
+<nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+        <div class="me-3">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize" id="sidebarToggle">
+                <i class="fa-solid fa-bars" style="font-size: 21px;"></i>
+            </button>
+        </div>
+        <div>
+            <a class="mt-2 fw-bold navbar-brand brand-logo">CAYR</a>
+            <div class="cr cr-top cr-left cr-sticky cr-green" id="devBanner" style="z-index: 10002;display:block"></div>
+        </div>
+    </div>
+    <div class="navbar-menu-wrapper d-flex justify-content-between">
+        <ul class="navbar-nav" id="rptHeaderSecion">
+            <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+                <h6 class="welcome-text" style="line-height:normal"><span class="text-black fw-bold" id="pageHeader"></span></h6>
+            </li>
+            <li class="mx-2" style="color:red" id="ErrorMsgHeader">
+            </li>
+        </ul>
+        <ul class="navbar-nav ms-auto" id="ulSearch" style="display:flex !important">
+            <li class="nav-item" id="ClaimQuickSearch">
+                <div class="search-container">
+                    <input type="text" placeholder="Enter Search Value..." id="searchClaim">
+                    <i class="fa-solid fa-search menu-icon" id="searchIcon" data-ev="EV_Claim_Search"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<script>
+    Core.SetTopMenuHeading();
+    $("#sidebarToggle").click(function (e) {
+        e.preventDefault();
+        $("body").toggleClass("sidebar-icon-only");
+    });
+</script>
+

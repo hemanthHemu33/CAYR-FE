@@ -1,0 +1,307 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR-Admin-Users</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+    <script src="../common/modxCore/js/QCGridConfiguration.js"></script>
+    <!--Custom css-->>
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        .content-wrapper {
+            padding: 6px !important;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .navbar .navbar-menu-wrapper {
+        }
+
+        .btn-link-table {
+            font-weight: bold !important;
+            border: none !important;
+            color: dodgerblue !important;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Footer will stay at the bottom */
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <!--  Main wrapper -->
+            <div class="main-panel">
+                <div class="theme-setting-wrapper">
+                    <div id="theme-settings" class="settings-panel" style="top: 55px !important">
+                        <div class="settings-heading" style="border-bottom: 1px solid #dee2e6;">
+                            Admin
+                            <i class="settings-close fas fa-times" data-ev="EV_CloseSubMenu"></i>
+                            <i class="fas fa-ellipsis-v menu-icon mx-4 settings-close d-none" id="dictEllipsisDropdown" data-bs-toggle="dropdown" aria-expanded="true" data-ev="EV_Show_EllipsisMenu"></i>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" id="dictEllipsisMenu" aria-labelledby="dictEllipsisDropdown">
+                            </div>
+                        </div>
+                        <ul class="list-unstyled" id="subMenuList" style="cursor:pointer">
+                            <li class="m-2 custom-dist-codes" value="Manage User Group" data-ev="EV_ManageUserGroup" id="lm_ManageGroupRole" style="display: none">Manage Group & Role</li>
+                            <li class="m-2 custom-dist-codes" value="Manage User" data-ev="EV_ManageUser" style="background-color: lightgray; display: none;" id="lm_ManageUser" >Manage User</li>
+    
+                        </ul>
+                    </div>
+                </div>
+                <div class="content-wrapper">
+
+                    <!--Default Message-->
+                    <div id="defaultMsg" class="custom-margin-dictionary d-none">
+                    </div>
+                    <!--Client-->
+                    <div class="row d-flex menuDiv mt-0">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="manageUserGrid" style=" border-right: 1px solid #ddd;">
+
+                            <!-- Controls Row -->
+                            <div class="control-section custom-margin-dictionary p-2 d-flex justify-content-between" id="UserFilter">
+                                <!-- Left: Dropdown and Label -->
+                                <div class="d-flex justify-content-between">
+                                    <div class="dropdown-group mx-2">
+                                        <label for="selClient">Select Client</label>
+                                        <select class="form-control selClient" data-ev="EV_Client_Change" id="selClient">
+                                        </select>
+                                    </div>
+                                    <div class="dropdown-group mx-2 filters" style="display: none;">
+                                        <label class="selActive">Show User</label>
+                                        <select class="form-select form-select-sm selActive" id="selActive" data-ev="EV_Active">
+                                            <option value="-1">All</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">InActive</option>
+                                        </select>
+                                    </div>
+                                    <div class="dropdown-group mx-2 filters" style="display: none;">
+                                        <label for="selSearch">Search by</label>
+                                        <select class="form-control" id="selSearch" data-ev="EV_SelSearch">
+                                            <option value="">Select</option>
+                                            <option value="UserName">User Name</option>
+                                            <option value="Name">Name</option>
+                                            <option value="Phone">Phone</option>
+                                            <option value="Email">Email</option>
+                                            <option value="JobTitle">Job Title</option>
+                                        </select>
+                                        <input type="text" class="form-control form-control-sm" id="inpSearch" autocomplete="off">
+                                        <button class="custom-add-btn btn-primary" data-ev="EV_Search">
+                                            Search
+                                        </button>
+                                    </div>
+                                </div>
+                          
+                                <div class="dropdown-group mx-2">
+                                    <!-- Right: Add Button -->
+                                    <button class="custom-add-btn btn-primary d-none" data-ev="EV_AddUser" id="btnAddUser" title="Add User">
+                                        <i class="fa fa-plus" data-ev="EV_AddUser"></i> Add User
+                                    </button>
+
+                                    <button class="custom-add-btn btn-primary d-none" data-ev="EV_AssignGroups" id="btnAssignGroups" title="Assign Groups to User">
+                                        <i class="fa fa-plus" data-ev="EV_AssignGroups"></i> Assign Groups
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Separator -->
+                            <div class="separator"></div>
+
+                            <!-- Grid Section -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div id="UserNoMsg" class="d-none custom-margin-dictionary"  >
+
+                                    </div>
+                                    <div class="table-bordered cursor-pointer mb-3" id="UserGrid">
+                                        <!-- Grid content -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Add-->
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pt-3 bg-white d-none in-tkt-modelCntr" id="divManageUsers" style="height: 87vh !important;">
+                            <div class="mngFaclit-wrapper">
+                                <div class="mngFaclit-header position-relative">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="mb-1">User Information</h5>
+                                            <p class="mb-0 text-muted small">Fill out the details below to add or update a user.</p>
+                                        </div>
+
+                                        <!-- Close / Cancel Button -->
+                                        <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdateUsers"></button>
+                                    </div>
+
+                                    <div id="divValidateMsg" class="error-message mt-2 w-100"></div>
+                                </div>
+
+                                <div id="divAddEditUser" class="facility-form-wrapper container " data-model="UserMeta">
+                                    <!-- Other Info -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                        <legend class="float-none w-auto">User Details</legend>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">First Name <span class="text-danger">*</span></label>
+                                                <input type="hidden" class="form-control form-control-sm" id="inpClientUserID" data-model-prop="ClientUserID" autocomplete="off">
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpFirstName" data-model-prop="FirstName" data-ev="EV_FirstName" autocomplete="off">
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Last Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpLastName" data-model-prop="LastName" data-ev="EV_LastName" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Phone <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm  " maxlength="15" data-model-prop="Phone" id="inpPhone" inputmode="numeric" title="Only numeric values allowed" oninput="Core.formatPhone(this)">
+ 
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Email <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpEmail" data-model-prop="Email" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Job Title</label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpJobTitle" data-model-prop="JobTitle" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- User Details -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-3 ">
+                                        <legend class="float-none w-auto">User</legend>
+                                        <div class="row">
+                                            <div class="form-group col-md-8">
+                                                <label>User Name<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="20" id="inpUserName" data-model-prop="UserName" autocomplete="off">
+                                            </div>
+                                            <div class="form-group col-md-2" style="text-align: center;">
+                                                <label>Active</label>
+                                                <input class="form-control form-control-sm" type="checkbox" value="" data-model-prop="Active" checked>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" id="divResetPW" style="display: none;">
+                                            <div class="col-md-8">
+                                                <button class="custom-add-btn btn-primary btn-danger" data-ev="EV_PW">
+                                                    <i class="fas fa-key mr-1" data-ev="EV_PW"></i> Reset Password
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- User Group -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-3 ">
+                                        <legend class="float-none w-auto">User Group</legend>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <ul class="list-group-flush adminRoleUl" id="ulUserGroupMapping"></ul>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button class="custom-add-btn btn-primary" data-ev="EV_Save">
+                                            <i class="fas fa-save mr-1" data-ev="EV_Save"></i> Save
+                                        </button>
+                                    </div>
+
+                                    <!-- Alert -->
+                                    <div id="inlinealertMessage" class="mt-2 text-danger small"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- AssignGroups -->
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pt-3 bg-white d-none in-tkt-modelCntr" id="divAssignGroups" style="height: 87vh !important;">
+                            <div class="mngFaclit-wrapper">
+                                <div class="mngFaclit-header position-relative">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="mb-1">Assign Groups</h5>
+                                            <p class="mb-0 text-muted small">Assign Groups to selected user.</p>
+                                        </div>
+
+                                        <!-- Close / Cancel Button -->
+                                        <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdateUsersAssignGroups"></button>
+                                    </div>
+
+                                    <div id="divValidateMsgGroup" class="error-message mt-2 w-100"></div>
+                                </div>
+
+                                <div id="" class="facility-form-wrapper container">
+                                    <!-- User Group -->
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="list-group-flush adminRoleUl" id="ulUserGroupMappingAssignGroups"></ul>
+                                        </div>
+                                    </div>
+                                   
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button class="custom-add-btn btn-primary" data-ev="EV_SaveGroups">
+                                            <i class="fas fa-save mr-1" data-ev="EV_SaveGroups"></i> Save
+                                        </button>
+                                    </div>
+
+                                    <!-- Alert -->
+                                    <div id="inlinealertMessageGroups" class="mt-2 text-danger small"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/js/core.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="js/manageUser.js"></script>
+</body>
+
+</html>

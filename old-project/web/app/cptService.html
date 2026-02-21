@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR - Cpt Services</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+    <script src="../common/modxCore/js/QCGridConfiguration.js"></script>
+    <!--Custom css-->>
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        body,
+        html {
+            overflow-y: scroll;
+            padding-right: 0 !important;
+        }
+
+        .content-wrapper {
+            padding: 16px !important;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .navbar .navbar-menu-wrapper {
+        }
+
+        .btn-link-table {
+            font-weight: bold !important;
+            border: none !important;
+            color: dodgerblue !important;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Footer will stay at the bottom */
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <!--  Main wrapper -->
+            <div class="main-panel">
+                <div class="theme-setting-wrapper">
+                    <div id="theme-settings" class="settings-panel" style="top: 55px !important">
+                        <div class="settings-heading" style="border-bottom: 1px solid #dee2e6;">
+                            CPT Services
+                            <i class="settings-close fas fa-times" data-ev="EV_CloseSubMenu"></i>
+                            <i class="fas fa-ellipsis-v menu-icon mx-4 settings-close d-none" id="dictEllipsisDropdown" data-bs-toggle="dropdown" aria-expanded="true" data-ev="EV_Show_EllipsisMenu"></i>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" id="dictEllipsisMenu" aria-labelledby="dictEllipsisDropdown">
+                            </div>
+                        </div>
+                        <ul class="list-unstyled" id="subMenuList" style="cursor:pointer">
+                            <li class="m-2 custom-dist-codes" value="Manage CPT Service" data-ev="EV_ManageCptService" style="background-color:lightgray;display: none;" id="lm_cptServicesSubMenu">Services</li>
+                            <li class="m-2 custom-dist-codes" value="Manage Service Master" data-ev="EV_ManageServiceMaster" style="display: none;" id="lm_serviceSubMenu">Mange Services</li>
+                            <li class="m-2 custom-dist-codes" value="Manage Facility Service" data-ev="EV_ManageFacilityService" display: none;" id="lm_facilityServicesSubMenu">Facility Services</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="content-wrapper">
+                    <div class="row d-flex menuDiv mt-0">
+
+                        <div class="card border-0 rounded-0 shadow-none mb-2 px-0  " id="manageCptServiceSection">
+                            <div class="control-section card-header bg-light  px-3 rounded-0 d-flex align-items-center justify-content-between flex-wrap">
+                                <!-- Left: Title & Subtitle -->
+                                <div class="mb-2 mb-md-0 custom-margin-dictionary" id="filterSection">
+                                    <h4 class="gridHeader mb-1">
+                                        <i class="fa-regular fa-user me-2 text-primary"></i> Cpt Services
+                                    </h4>
+                                    <p class="text-muted small mb-0">
+                                        View CPTs and their related services.
+                                    </p>
+                                </div>
+
+                                <!-- Right: Filters & Add Button -->
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <!-- Search By Filter -->
+                                        <div class="d-flex flex-column">
+                                            <label for="selSearch" class="fw-semibold">Search By</label>
+                                            <select class="form-control" id="selSearch" data-ev="EV_SelSearch" style="width:100px">
+                                                <option value="">Select</option>
+                                                <option value="ServiceType">Service Type</option>
+                                                <option value="Service">Service</option>
+                                                <option value="CptCode">Cpt Code</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="d-flex flex-column">
+                                            <!-- Search Textbox -->
+                                            <label for="inpSearch" class="fw-semibold">Search Value</label>
+                                            <input type="text" class="form-control form-control-sm" id="inpSearch"
+                                                   placeholder="Enter search term" autocomplete="off" style="width:170px">
+
+
+                                        </div>
+                                        <!-- Search Button -->
+                                        <button class="custom-add-btn btn-primary mb-0" data-ev="EV_Search">
+                                            Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CPTServiceAccordianIns" class="  mt-0 mb-1 custom-margin-dictionary" data-single-open="true" data-model="OrderItemMeta">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start p-0 border-0" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="false" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" >
+                                        <div class="ord-acc-inner pt-1 p-3">
+                                            <ul class="list-unstyled mb-0 small" id="CPTServiceIns"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body pt-0 px-0 " id="cptServiceDiv">
+                                <div id="ClientNoMsg" class="d-none" style="margin-left:200px">
+                                </div>
+                                <div class="table-bordered cursor-pointer mb-3" id="CPTServiceGrid">
+                                    <!-- Grid content -->
+                                </div>
+                            </div>
+                        </div>
+  
+ 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../common/js/core.js"></script>
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="../common/js/bootstrap-datepicker.min.js"></script>
+    <script src="js/cptService.js"></script>
+    <script>
+        $(document).on('input', 'input[type="text"].numeric-only', function () {
+            this.value = (this.value || '').replace(/\D/g, '');
+        });
+    </script>
+    <script>
+        fetch('orderjs/orderEnteryInstructions.json')
+            .then(resp => resp.json())
+            .then(data => Core.populateInstructions(data))
+            .catch(err => console.error('Error loading instructions:', err));
+    </script>
+</body>
+
+</html>
