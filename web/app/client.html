@@ -1,0 +1,607 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR-Client & Facility</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/modxCore/js/bootstrap.min.js"></script>
+    <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+    <script src="../common/modxCore/js/modxAppCore.js"></script>
+    <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+    <script src="../common/modxCore/js/QCGridConfiguration.js"></script>
+    <!--Custom css-->>
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        body,
+        html {
+            overflow-y: scroll;
+            padding-right: 0 !important;
+        }
+
+        .content-wrapper {
+            padding: 16px !important;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .navbar .navbar-menu-wrapper {
+        }
+
+        .btn-link-table {
+            font-weight: bold !important;
+            border: none !important;
+            color: dodgerblue !important;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Footer will stay at the bottom */
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <!--  Main wrapper -->
+            <div class="main-panel">
+
+                <div class="content-wrapper">
+                    <div class="row d-flex menuDiv mt-0">
+
+                        <div class="card border-0 rounded-0 shadow-none mb-2 px-0  " id="manageClientSection">
+                            <div class="control-section card-header bg-light  px-3 rounded-0 d-flex align-items-center justify-content-between flex-wrap">
+                                <!-- Left: Title & Subtitle -->
+                                <div class="mb-2 mb-md-0">
+                                    <h4 class="gridHeader mb-1">
+                                        <i class="fa-regular fa-user me-2 text-primary"></i> Manage Client
+                                    </h4>
+                                    <p class="text-muted small mb-0">
+                                        View and manage the client.
+                                    </p>
+                                </div>
+
+                                <!-- Right: Filters & Add Button -->
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <!-- Status Filter -->
+                                        <div class="d-flex flex-column">
+                                            <label for="selActive" class=" fw-semibold">Status</label>
+                                            <select class="form-select form-select-sm" id="selActive" data-ev="EV_Active" style="width:100px">
+                                                <option value="-1">All</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">InActive</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Search By Filter -->
+                                        <div class="d-flex flex-column">
+                                            <label for="selSearch" class="fw-semibold">Search By</label>
+                                            <select class="form-control" id="selSearch" data-ev="EV_SelSearch" style="width:100px">
+                                                <option value="">Select</option>
+                                                <option value="Name">Name</option>
+                                                <option value="ClientID">Client ID</option>
+                                                <option value="TaxID">Tax ID</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="d-flex flex-column">
+                                            <!-- Search Textbox -->
+                                            <label for="inpSearch" class="fw-semibold">Search Value</label>
+                                            <input type="text" class="form-control form-control-sm" id="inpSearch"
+                                                   placeholder="Enter search term" autocomplete="off" style="width:170px">
+
+
+                                        </div>
+                                        <!-- Search Button -->
+                                        <button class="custom-add-btn btn-primary mb-0" data-ev="EV_Search">
+                                            Search
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Add Button -->
+                                    <button class="custom-add-btn btn-primary mb-0" id="addClient" data-ev="EV_AddClient" data-toggle="tooltip" title="Add Client">
+                                        <i data-ev="EV_AddClient" class="fa fa-plus" style="cursor:pointer;"></i> Add Client
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="ClientAccordianIns" class="  mt-0 mb-1" data-single-open="true" data-model="OrderItemMeta">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start p-0 border-0" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="true" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" style="max-height:230px;">
+                                        <div class="ord-acc-inner pt-1 p-3">
+                                            <ul class="list-unstyled mb-0 small" id="ClientIns"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body pt-0 px-0">
+                                <div id="ClientNoMsg" class="d-none" style="margin-left:200px">
+                                </div>
+                                <div class="table-bordered cursor-pointer mb-3" id="ClientsGrid">
+                                    <!-- Grid content -->
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Grid Section -->
+
+                        <div class="card border-0 rounded-0 shadow-none  px-0 d-none" id="ManageFacilityGrid">
+                            <div class="control-section card-header bg-light py-2 px-3 rounded-0 d-flex align-items-center justify-content-between flex-wrap">
+                                <!-- Left: Title & Subtitle -->
+                                <div class="mb-2 mb-md-0">
+                                    <h4 class="gridHeader mb-1">
+                                        <i class="fa-regular fa-hospital me-2 text-primary"></i> Manage Facility
+                                    </h4>
+                                    <p class="text-muted small mb-0">
+                                        View and manage the client’s facilities.
+                                    </p>
+                                </div>
+
+                                <!-- Right: Filters & Add Button -->
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <!-- Status Filter -->
+                                        <div class="d-flex flex-column">
+                                            <label for="selActive_fcl" class=" fw-semibold">Status</label>
+                                            <select class="form-control " id="selActive_fcl" data-ev="EV_Active_fcl" style="width:100px">
+                                                <option value="-1">All</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">InActive</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Search By Filter -->
+                                        <div class="d-flex flex-column">
+                                            <label for="selSearchFcl" class="fw-semibold">Search By</label>
+                                            <select class="form-control " id="selSearchFcl" data-ev="EV_SelSearch_FacilityDrp" style="width:100px">
+                                                <option value="">Select</option>
+                                                <option value="Name">Name</option>
+                                                <option value="FacilityID">Facility ID</option>
+                                                <option value="FacilityType">Facility Type</option>
+                                                <option value="NPI">NPI</option>
+                                                <option value="TIN">TIN</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="d-flex flex-column">
+                                            <!-- Search Textbox -->
+                                            <label for="selSearchFcl" class="fw-semibold">Search Value</label>
+                                            <input type="text" class="form-control form-control-sm" id="inpSearchfcl"
+                                                   placeholder="Enter search term" autocomplete="off" style="width:170px">
+
+                                            <!-- Hidden Facility Type -->
+                                            <select class="form-select form-select-sm d-none" id="selFacilityType" style="width:170px"></select>
+                                        </div>
+                                        <!-- Search Button -->
+                                        <button class="custom-add-btn btn-primary searchCtl  mb-0" data-ev="EV_Search_fcl">
+                                            Search
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Add Button -->
+                                    <button class="custom-add-btn btn-primary mb-0" id="btnAddFacility"
+                                            data-ev="EV_AddFacilities" title="Add Facility">
+                                        <i class="fa fa-plus me-1"></i> Add Facility
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="FclAccordianIns" class="  mt-0 mb-1" data-single-open="true" data-model="OrderItemMeta">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start p-0 border-0" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="true" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" style="max-height:230px;">
+                                        <div class="ord-acc-inner pt-1 p-3">
+                                            <ul class="list-unstyled mb-0 small" id="FacilityIns"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body pt-0 px-0">
+                                <div class="table-bordered cursor-pointer mb-3" id="FacilityGrid">
+                                    <!-- Grid content -->
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!--Add-->
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pt-3 bg-white in-tkt-modelCntr d-none" id="divManageClient" style="height:90vh !important">
+                            <div class="mngFaclit-wrapper">
+                                <div class="mngFaclit-header position-relative">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="mb-1">Client Information</h5>
+                                            <p class="mb-0 text-muted small">Fill out the details below to add or update a client.</p>
+                                        </div>
+
+                                        <!-- Close / Cancel Button -->
+                                        <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdateClient"></button>
+                                    </div>
+
+                                    <div id="divValidateMsg" class="error-message mt-2 w-100"></div>
+                                </div>
+
+                                <div id="divAddEditClientForm" class="facility-form-wrapper container" data-model="ClientMeta">
+                                    <!-- Client Details -->
+                                    <fieldset class="facility-fieldset border p-3 rounded mb-3">
+                                        <legend class="float-none w-auto">Client Details</legend>
+
+                                        <input type="hidden" id="ClientID" data-model-prop="ClientID">
+
+                                        <div class="row mb-1">
+                                            <div class="col-md-6">
+                                                <label>Name <span class="text-danger">*</span></label>
+                                                <input type="text" maxlength="80" class="form-control form-control-sm" id="inpName" autocomplete="off" data-model-prop="Name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Department</label>
+                                                <input type="text" maxlength="80" class="form-control form-control-sm" id="inpDepartment" autocomplete="off" data-model-prop="Department">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1">
+                                            <div class="col-md-12">
+                                                <label>Description</label>
+                                                <textarea id="inpDescription" class="form-control form-control-sm" rows="3" maxlength="200" data-model-prop="Description"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1">
+                                            <div class="col-md-12">
+                                                <label>Contact Name</label>
+                                                <input type="text" maxlength="50" class="form-control form-control-sm" id="inpContactName" autocomplete="off" data-model-prop="ContactName">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-md-6">
+                                                <label>Contact Phone <span class="text-danger">*</span></label>
+                                                <input type="text" maxlength="15" class="form-control form-control-sm" id="inpContactPhone" autocomplete="off" data-model-prop="ContactPhone" oninput="Core.formatPhone(this)">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Contact Email <span class="text-danger">*</span></label>
+                                                <input type="email" maxlength="80" class="form-control form-control-sm" id="inpContactEmail" autocomplete="off" data-model-prop="ContactEmail">
+                                            </div>
+                                        </div>
+                                        <!-- Active and Tax ID Row -->
+                                        <div class="row align-items-center mb-1">
+                                            <div class="col-md-6 mt-3 mt-md-0">
+                                                <label>Tax ID</label>
+                                                <input type="text" maxlength="9" class="form-control form-control-sm" id="inpTaxID" autocomplete="off" data-model-prop="TaxID" oninput="Core.formatTaxID(this)">
+                                            </div>
+                                            <div class="form-group col-md-2" style="text-align: center;">
+                                                <label>Active</label>
+                                                <input class="form-control form-control-sm" type="checkbox" value="" data-model-prop="Active" id="chkActive" checked>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label>Logo </label>
+                                                <div class="client-logo-upload-wrapper d-flex align-items-center">
+                                                    <div class="client-logo-preview me-3">
+                                                        <img id="logoViewer" class="img-thumbnail rounded client-logo-image" src="" alt="Preview">
+                                                    </div>
+                                                    <div class="client-logo-actions">
+                                                        <input type="file" id="logoUploader" accept=".png, .jpg, .jpeg" class="d-none">
+                                                        <button class="custom-add-btn btn-primary" data-ev="EV_UPLOAD_LOGO" id="inpLogo">
+                                                            <i class="fas fa-upload me-1" data-ev="EV_UPLOAD_LOGO"></i> Upload
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="client-logo-actions">
+                                                        <span class="float-none w-auto" id="spanMaxSize" style="color: rgb(255, 0, 0);"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Address Info -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-1">
+                                        <legend class="float-none w-auto">Address</legend>
+
+                                        <div class="row mb-1">
+                                            <div class="col-md-6">
+                                                <label>Address 1 <span class="text-danger">*</span></label>
+                                                <input type="text" maxlength="80" class="form-control form-control-sm" id="inpAddress1" autocomplete="off" data-model-prop="Address1">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Address 2</label>
+                                                <input type="text" maxlength="80" class="form-control form-control-sm" id="inpAddress2" autocomplete="off" data-model-prop="Address2">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1">
+                                            <div class="col-md-4">
+                                                <label>City <span class="text-danger">*</span></label>
+                                                <input type="text" maxlength="80" class="form-control form-control-sm" id="inpCity" autocomplete="off" data-model-prop="City">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>State <span class="text-danger">*</span></label>
+                                                <select class="form-select form-select-sm" id="inpState" data-model-prop="State" style="height:28px">
+                                                    <option disabled selected>Select state</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Zip <span class="text-danger">*</span></label>
+                                                <input type="text" maxlength="10" class="form-control form-control-sm" id="inpZip" autocomplete="off" data-model-prop="Zip" oninput="Core.formatZipCode(this)">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Contract Info -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-1">
+                                        <legend class="float-none w-auto">Contract Info</legend>
+
+                                        <div class="row mb-1">
+                                            <div class="col-md-6">
+                                                <label>Contract Start Date</label>
+                                                <input type="text" class="form-control form-control-sm dt" id="ContractStartDate" data-model-prop="ContractStartDate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Contract End Date</label>
+                                                <input type="text" class="form-control form-control-sm dt" id="ContractEndDate" data-model-prop="ContractEndDate">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Inline Alert -->
+                                    <div id="inlinealertMessage" class="text-danger small mb-2"></div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button class="custom-add-btn btn-primary" data-ev="EV_Save" id="btnClientSave">
+                                            <i class="fas fa-save me-1" data-ev="EV_Save"></i> Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Add facility-->
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pt-3 bg-white d-none in-tkt-modelCntr" id="divManageFacilites">
+                            <div class="mngFaclit-wrapper">
+                                <div class="mngFaclit-header position-relative">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="mb-1">Facility Information</h5>
+                                            <p class="mb-0 text-muted small">
+                                                Please complete the form below to add or update a facility for <strong><spn id="SelClientFacility">--</spn></strong>.
+                                            </p>
+
+                                        </div>
+
+                                        <!-- Close / Cancel Button -->
+                                        <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdateFacilites"></button>
+                                    </div>
+
+                                    <div id="divValidateMsgFcl" class="error-message mt-2 w-100"></div>
+                                </div>
+                                <div id="divAddEditFacility" class="facility-form-wrapper container " data-model="FacilitesMeta">
+
+                                    <!-- Facility Details -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-3 ">
+                                        <legend class="float-none w-auto">Facility Details</legend>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Facility Type</label>
+                                                <select class="form-select form-select-sm" data-model-prop="FacilityType" id="FacilityType">
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Name <span class="text-danger">*</span></label>
+                                                <input type="hidden" id="ID" data-model-prop="ID">
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpNamefcl" data-model-prop="Name" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>NPI <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm  numeric-only" maxlength="10" data-model-prop="NPI"
+                                                       title="Only numeric values allowed"
+                                                       autocomplete="off"
+                                                       id="inpNPI">
+                                            </div>
+                                            <div class="form-group col-md-2" style="text-align: center;">
+                                                <label>Active</label>
+                                                <input class="form-control form-control-sm" type="checkbox" value="" data-model-prop="Active" checked>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Tax ID</label>
+                                                <input type="text" class="form-control form-control-sm  numeric-only" maxlength="9" data-model-prop="TaxID" autocomplete="off" id="inpTaxID">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Medicare Tax ID</label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="11" data-model-prop="MedicareTaxID" autocomplete="off" id="inpMedicareTaxID">
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>EIN</label>
+                                                <input type="text" class="form-control form-control-sm numeric-only" maxlength="9" data-model-prop="EIN" autocomplete="off" id="inpEIN">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>TIN</label>
+                                                <input type="text" class="form-control form-control-sm numeric-only" maxlength="9" data-model-prop="TIN" autocomplete="off" id="inpTIN">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Contact Info -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                        <legend class="float-none w-auto">Contact Info</legend>
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <label class="float-none w-auto">Contact Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="50" id="inpContactNameFcl" data-model-prop="ContactName" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Contact Phone <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="15" id="inpContactPhoneFcl" data-model-prop="ContactPhone" autocomplete="off" oninput="Core.formatPhone(this)">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Contact Email <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpContactEmailFcl" data-model-prop="ContactEmail" autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Fax Number</label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="15" data-model-prop="FaxNumber" autocomplete="off" oninput="Core.formatPhone(this)">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Facility Emp Contact</label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="20" data-model-prop="FacilityEmpContact" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Facility Emp Phone</label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="15" data-model-prop="FacilityEmpPhone" autocomplete="off" oninput="Core.formatPhone(this)">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="float-none w-auto">Facility Emp Email</label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="20" data-model-prop="FacilityEmpEmail" autocomplete="off" id="inpFacilityEmpEmail">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Address Info -->
+                                    <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                        <legend class="float-none w-auto">Address</legend>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Address 1 <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpAddress1fcl" data-model-prop="Address1" autocomplete="off">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Address 2</label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpAddress2fcl" data-model-prop="Address2" autocomplete="off">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>City <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="80" id="inpCityfcl" data-model-prop="City" autocomplete="off">
+                                            </div>
+                                            <div class="form-group col-md-5">
+                                                <label>State <span class="text-danger">*</span></label>
+                                                <select class="form-select form-select-sm" id="inpStatefcl" data-model-prop="State" style="height:28px"></select>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label>Zip <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm" maxlength="10" id="inpZipfcl" data-model-prop="Zip" autocomplete="off" oninput="Core.formatZipCode(this)">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button class="custom-add-btn btn-primary" data-ev="EV_Save_fcl" id="btnFacilitySave">
+                                            <i class="fas fa-save mr-1" data-ev="EV_Save_fcl"></i> Save
+                                        </button>
+                                        <button id="btnDelete" type="button" class="custom-del-btn mx-2" data-ev="EV_Delete_SrvDet" style="display: none;">
+                                            <i class="fa fa-trash mr-1" data-ev="EV_Delete_SrvDet" aria-hidden="true"></i> Delete
+                                        </button>
+                                    </div>
+
+                                    <!-- Alert -->
+                                    <div id="inlinealertMessage" class="mt-2 text-danger small"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../common/js/core.js"></script>
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="../common/js/bootstrap-datepicker.min.js"></script>
+    <script src="js/client.js"></script>
+    <script src="../admin/js/manageFacilites.js"></script>
+    <script>
+        $(document).on('input', 'input[type="text"].numeric-only', function () {
+            this.value = (this.value || '').replace(/\D/g, '');
+        });
+    </script>
+    <script>
+        fetch('orderjs/orderEnteryInstructions.json')
+            .then(resp => resp.json())
+            .then(data => Core.populateInstructions(data))
+            .catch(err => console.error('Error loading instructions:', err));
+    </script>
+</body>
+
+</html>

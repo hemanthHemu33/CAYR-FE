@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR - Facility Physician</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+    <link rel="stylesheet" href="css/selectize.css" />
+
+    <script src="../common/modxCore/js/QCGridConfiguration.js"></script>
+    <link href="../common/css/select2.min.css" rel="stylesheet" />
+    <link href="../common/css/flatDatePicker.css" rel="stylesheet" />
+
+    <!--Custom css-->
+    <link href="css/multiselect.css" rel="stylesheet" />
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+    <style>
+        body,
+        html {
+            overflow: scroll;
+            padding-right: 0 !important;
+        }
+
+
+        .physician-search-results {
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 1050;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+      
+        /* Container */
+        .search-box {
+            position: relative;
+            width: 100%;
+        /*    max-width: 650px;*/
+            margin: 0 auto; 
+        }
+
+        .search-input {
+            height: 28px;
+            width: 100%;
+            padding: 9px 15px 10px 43px;
+            border: 1px solid #ddd;
+            border-radius: 5px;  
+            outline: none;
+            transition: border-radius 0.15s ease-in-out, border-color 0.15s ease-in-out;
+            font-size: 12px;
+        }
+
+            /* On focus */
+            .search-input:focus {
+                outline: none;
+                border-radius: 8px 8px 0px 0px;
+                border-bottom: 0px;
+                border-color: var(--primary);
+            }
+
+        /* Icon */
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 16px;
+            pointer-events: none;
+            background:none;
+        }
+
+        /* Dropdown */
+        .npidropdown {
+            position: absolute;
+            top: 100%;
+            left: 0px;
+            right: 0px;
+            z-index: 1000;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 13px 13px;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.2s ease-in-out;
+            border-color: var(--primary);
+            padding:5px 12px;
+        }
+
+            .npidropdown .list-group-item {
+                border: none;
+                padding: 10px 15px;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+                .npidropdown .list-group-item:hover {
+                    background-color: #f1f3f4; 
+                }
+
+            .npidropdown .no-results {
+                font-size: 14px;
+                color: #555;
+                padding: 10px 15px;
+            }
+        /* Fade effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .active-dropdown {
+            display: block;
+            border-radius: 0 0 10px 10px;
+            border-top: none;
+        }
+        .dropdown-item{
+            padding:5px 10px;
+            cursor:pointer;
+        }
+        .dropdown-item:hover{
+            background:lightgray;
+
+        }
+        /*Multiselect drop down css*/
+        button, .btn {
+        font-size:12px
+        }
+        /* ================== TABLE SECTION ================== */
+        #physicianTable th {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            white-space: nowrap;
+        }
+
+        #physicianTable td {
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        /* Empty State */
+        .mngFaclit-empty-state {
+            border: 2px dashed #dcdcdc;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+        .btn btn-default multiselect-clear-filter {
+            margin: -12px 5px !important;
+            padding: 5px 12px !important;
+            background: transparent !important;
+        }
+        #facilityGrid {
+            position: relative;
+        }
+
+        #FacilityLoader {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.6);
+        }
+
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <!--  Main wrapper -->
+            <div class="main-panel">
+                <div class="theme-setting-wrapper">
+                    <div id="theme-settings" class="settings-panel" style="top: 55px !important">
+                        <div class="settings-heading" style="border-bottom: 1px solid #dee2e6;">
+                            Manage Physican
+                            <i class="settings-close fas fa-times" data-ev="EV_CloseSubMenu"></i>
+                            <i class="fas fa-ellipsis-v menu-icon mx-4 settings-close d-none" id="dictEllipsisDropdown" data-bs-toggle="dropdown" aria-expanded="true" data-ev="EV_Show_EllipsisMenu"></i>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" id="dictEllipsisMenu" aria-labelledby="dictEllipsisDropdown">
+                            </div>
+                        </div>
+                        <ul class="list-unstyled" id="subMenuList" style="cursor:pointer">
+                            <li class="m-2 custom-dist-codes" value="Manage Physician Master" data-ev="EV_ManagePhysicianMaster">Physician Master </li>
+                            <li class="m-2 custom-dist-codes" value="Manage Physician Facility" data-ev="EV_ManagePhysicianFacility" style="background-color: lightgray;">Physician Facility</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="content-wrapper">
+                    <div class="row mt-3 custom-margin-dictionary" id="FacilityPhysician">
+                        <!-- Left Side - Physician Details -->
+                        <div class="col-lg-6 col-md-12 d-flex flex-column" style="margin-right: -28px; margin-left: -14px;">
+                            <div class="card my-3" style="border-radius:3px">
+                                <div class="card-header bg-light border-bottom">
+                                    <div class="d-flex align-items-start flex-wrap gap-3">
+
+                                        <!-- Title + Subtitle -->
+                                        <div class="me-auto">
+                                            <h6 class="mb-1 fw-semibold">Physician Details</h6>
+                                            <p class="mb-0 text-muted small">
+                                                Search and select a physician to add to the facility.
+                                            </p>
+                                        </div>
+
+                                       
+                                    </div>
+                                </div>
+
+                                <div class="card-body" style="height:85vh; display:flex; flex-direction:column;">
+                                    <!-- Error Message -->
+                                    <div id="divAddNpiMsg" class="error-message mt-1 mb-1 mx-1 w-100"></div>
+
+                                    <!-- ================== FILTER SECTION ================== -->
+                                    <div class="" id="physicianFilterSection">
+                                        <div class="d-flex flex-wrap ">
+                                            <!-- Filters: grouped left side -->
+                                            <div class="d-flex flex-wrap gap-3">
+
+                                                <!-- Client Dropdown -->
+                                                <div class="d-flex flex-column" style="min-width:150px;">
+                                                    <label class=" fw-semibold" for="inpClient">Client</label>
+                                                    <select class="form-select form-select-sm"
+                                                            id="inpClient"
+                                                            data-model-prop="ClientID"
+                                                            data-ev="Ev_OnChange_Client">
+                                                    </select>
+                                                </div>
+
+                                                <!-- Facility Dropdown -->
+                                                <div class="d-flex flex-column" style="min-width:180px;">
+                                                    <label class=" fw-semibold" for="selFacilityList">Facility</label>
+                                                    <select multiple
+                                                            id="selFacilityList"
+                                                            class="form-select form-select-sm"
+                                                            data-model-prop="Payor">
+                                                    </select>
+                                                </div>
+
+                                                <!-- Action Buttons -->
+                                                <div class="d-flex align-items-end gap-2">
+                                                    <button type="button" class="custom-add-btn btn-primary" id="btnSearchPhysician" data-ev="EV_SearchPhysicin" data-toggle="tooltip" title="Search Physician"> <i class="fa-solid fa-magnifying-glass me-1" data-ev="EV_SearchPhysicin"></i> </button> <button type="button" class="custom-add-btn btn-secondary" id="btnResetPhysician" data-ev="EV_ResetPhysician" data-toggle="tooltip" title="Reset Physician Search"> <i class="fa-solid fa-rotate-left me-1" data-ev="EV_ResetPhysician"></i> </button>
+                                                </div>
+
+                                            </div>
+
+                                            <!-- Search Physician -->
+                                            <div class="d-flex flex-column w-100">
+                                                <label class=" fw-semibold" for="npiSearch">Search Physician</label>
+                                                <div class="search-wrapper position-relative" id="searchPyDiv">
+                                                    <div class="search-box">
+                                                        <i class="fa fa-search search-icon"></i>
+                                                        <input type="text" id="npiSearch" class="search-input" placeholder="Search by NPI or Name..." autocomplete="off" aria-haspopup="listbox" aria-expanded="false" aria-owns="npiDropdown">
+                                                    </div>
+                                                    <ul id="npiDropdown" class="npidropdown d-none" data-ev="Ev_showPhysicanDetails" role="listbox">
+                                                        <!-- JS will inject <li> results here -->
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- ================== END FILTER SECTION ================== -->
+                                    <!-- ================== TABLE SECTION ================== -->
+                                    <div class="flex-grow-1 overflow-hidden mt-2">
+                                        <div id="addMappedPhysicain"
+                                             class="d-none d-flex align-items-end justify-content-between gap-3 flex-wrap">
+
+                                            <!-- Physician NPI input -->
+                                            <div class="flex-grow-1 mb-1">
+                                                <label for="inpPhysicianNpi" class=" ">
+                                                    Physician&nbsp;NPI
+                                                </label>
+                                                <input type="text"
+                                                       id="inpPhysicianNpi"
+                                                       class="form-control form-control-sm"
+                                                       placeholder="Enter Physician NPI">
+                                            </div>
+
+                                            <!-- Add button -->
+                                            <button id="btnAddPhysician"
+                                                    type="button"
+                                                    class="custom-add-btn btn-primary mb-1"
+                                                    data-ev="EV_AddMappedPhysician"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Add Physician">
+                                                <i class="fa fa-plus me-1"></i>
+                                                Add&nbsp;Physician
+                                            </button>
+                                        </div>
+
+                                        <div class="row" id="PhysicianTabl">
+                                            <div class="col-12">
+
+                                                <div class="table-bordered cursor-pointer mb-3" id="PhysicianFacilityGrid">
+                                                    <!-- Grid content -->
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Empty State -->
+                                        <div class="d-none" id="PhysicianNoSelection">
+
+                                        </div>
+
+
+                                    </div>
+                                    <!-- ================== END TABLE SECTION ================== -->
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Right Side - Facility -->
+                        <div class="col-lg-6 col-md-12 d-flex flex-column">
+                            <div class="card my-3" style="border-radius:3px">
+                                <div class="card-header">
+                                    Facility To Mapped
+                                    <p class="mb-0 text-muted small">Select one or more facilities to assign the physician. </p>
+                                </div>
+                                <div class="card-body" style="height:85vh">
+
+                                    <div id="divValidateMsg" class="error-message mt-1 mb-1 mx-1 w-100"></div>
+                                    <div class="d-flex justify-content-between d-none" id="SerchFacilityDivId">
+                                        <input class="form-control" type="text" placeholder="Enter Facility Name.." id="inpSearchByFacility">
+                                        <button type="button" class="custom-add-btn  btn-primary mt-0" data-ev="Ev_searchFacility">Search</button>
+                                    </div>
+                                    <!-- Facility Grid -->
+                                    <div id="facilityGrid" class="mb-3 d-none" style="height:64vh;overflow-y:scroll;">
+                                        <table class="table  table-striped table-bordered table-sm table-hover" id="FacilityTable">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="d-none ">FacilityID</th>
+                                                    <th class="d-none">PhysicianFacilityID</th>
+                                                    <!--<th style="width:6%!important"><input type="checkbox" class="form-control-md" /></th>-->
+                                                    <th></th>
+                                                    <th>Facility</th>
+                                                    <th>From Date</th>
+                                                    <th>To Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Dynamic rows go here -->
+                                            </tbody>
+                                        </table>
+
+                                        <!-- Loader -->
+                                        <div id="FacilityLoader" style="display:none; text-align:center; padding:10px;">
+                                            <div class="spinner-border text-primary" role="status"></div>
+                                            <span>Loading facilities...</span>
+                                        </div>
+
+                                        <!-- No data message -->
+                                        <div id="FacilityNoData" style="display:none; text-align:center; padding:10px; color:#888;">
+                                            No facilities available
+                                        </div>
+
+
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div class=" " id="orderResumeMsg">
+                                             
+
+                                        </div>
+                                        <!-- Save Button -->
+                                        <div class="  d-none" id="divSaveMappingBtn">
+                                            <button class="btn btn-primary" id="saveBtn" data-ev="Ev_Save_PhysicianFacility">Save</button>
+                                        </div>
+                                    </div>
+                                   
+
+                                    <div class=" " id="FacilityNoSelection">
+                                        <div class="mngFaclit-empty-state text-center p-5 m-0">
+                                            <i class="fa-solid fa-hospital text-muted mb-4 mngFaclit-empty-icon" style="font-size:70px"></i>
+                                            <p class="mb-0">
+                                                <strong>Select a physician to view details and assign a facility.</strong>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!--Add physician-->
+                        <div id="divAddEditPhysician" class="col-lg-5 col-md-5 col-sm-12 pt-3 bg-white in-tkt-modelCntr d-none" data-model="PhysicianMeta">
+                            <div class="mngFaclit-header position-relative">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="mb-1">Physician</h5>
+                                        <p class="mb-0 text-muted small">Assign physician to facility with Speciality and date range.</p>
+                                    </div>
+                                    <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdatePhysician"></button>
+                                </div>
+                                <div id="divValidateMsgMap" class="error-message mt-2 w-100"></div>
+                            </div>
+
+                            <!-- Physician Details -->
+                            <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                <legend class="float-none w-auto">Physician Details / Address Info</legend>
+                                <div class="row">
+                                    <input class="d-none" id="inpPhysiciansMasterID" data-model-prop="PhysiciansMasterID" />
+
+                                    <div class="form-group col-md-4">
+                                        <label>Physician NPI <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm numeric-only"
+                                               data-model-prop="PhysicianNPI"
+                                               maxlength="10"
+                                               id="inpPhysicianNPI"
+                                               pattern="\d*"
+                                               inputmode="numeric"
+                                               title="Only numeric values allowed"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Provider Type <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm  "
+                                               data-model-prop="ProviderType"
+                                               id="inpProviderType"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Physician Group Code</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="PhysicianCode"
+                                               id="inpPhysicianCode"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Suffix<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="Suffix"
+                                               id="inpSuffix"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>First Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="PhysicianFirstName"
+                                               id="inpPhysicianFirstName"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Middle Name</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="PhysicianMiddleName"
+                                               id="inpPhysicianMiddleName"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Last Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="PhysicianLastName"
+                                               id="inpPhysicianLastName"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Address 1<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="Address1"
+                                               id="inpAddress1"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Address 2</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="Address2"
+                                               id="inpAddress2"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>City<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="City"
+                                               id="inpCity"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>State<span class="text-danger">*</span></label>
+                                        <select class="form-select form-select-sm"
+                                                data-model-prop="State"
+                                                id="inpState"
+                                                autocomplete="off">
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>ZIP Code <span class="text-danger">*</span></label>
+                                        <input type="text" maxlength="10" class="form-control form-control-sm" id="inpZIPCode" autocomplete="off" data-model-prop="ZIPCode" oninput="Core.formatZipCode(this)">
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Phone<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm " maxlength="15" data-model-prop="PhysicianPhone" id="inpPhysicianPhone" title="Only numeric values allowed" oninput="Core.formatPhone(this)">
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Email<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="PhysicianEmail"
+                                               id="inpPhysicianEmail"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Gender <span class="text-danger">*</span></label>
+                                        <select class="form-select form-select-sm"
+                                                data-model-prop="Gender"
+                                                id="inpGender">
+                                            <option value="">Select</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Secondary Location</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="SecondaryLocation"
+                                               id="inpSecondaryLocation"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>State License Number</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="StateLicenceNumber"
+                                               id="inpStateLicenceNumber"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Restrict Regions</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="RestrictRegions"
+                                               id="inpRestrictRegions"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>FEIN </label>
+                                        <input type="text" class="form-control numeric-only"
+                                               id="inpFEIN"
+                                               autocomplete="off"
+                                               maxlength="9"
+                                               data-model-prop="FEIN">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>EIN </label>
+                                        <input type="text" class="form-control numeric-only"
+                                               id="inpEIN"
+                                               autocomplete="off"
+                                               maxlength="9"
+                                               data-model-prop="EIN">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>TIN </label>
+                                        <input type="text" class="form-control numeric-only"
+                                               id="inpTIN"
+                                               autocomplete="off"
+                                               maxlength="9"
+                                               data-model-prop="TIN">
+                                    </div>
+                                    <div class="form-group col-md-2" style="text-align: center;">
+                                        <label>Active </label>
+                                        <input class="form-control form-control-sm" type="checkbox" value="" data-model-prop="Active" checked="">
+                                    </div>
+
+
+                                </div>
+
+                            </fieldset>
+
+                            <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                <legend class="float-none w-auto">Credential & Affiliations</legend>
+                                <div class="row">
+                                    <!-- Credential -->
+                                    <div class="form-group col-md-4">
+                                        <label>Credential<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="Credential"
+                                               id="inpCredential">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Primary Department <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="PrimaryDepartment"
+                                               id="inpPrimaryDepartment">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Primary Location <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm"
+                                               data-model-prop="PrimaryLocation"
+                                               id="inpPrimaryLocation">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Pecos Status</label>
+                                        <select class="form-select form-select-sm"
+                                                data-model-prop="PecosStatus"
+                                                id="inpPecosStatus">
+                                            <option value="">Select</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Pecos Date</label>
+                                        <input type="text" class="form-control form-control-sm dt"
+                                               data-model-prop="PecosDate"
+                                               id="inpPecosDate">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Pecos Disenroll Date</label>
+                                        <input type="text" class="form-control form-control-sm dt"
+                                               data-model-prop="PecosDisEnrollDate"
+                                               id="inpPecosDisEnrollDate">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Pecos Last Date</label>
+                                        <input type="text" class="form-control form-control-sm dt"
+                                               data-model-prop="PecosLastDate"
+                                               id="inpPecosLastDate">
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+
+
+
+
+                            <!-- Speciality Information Info -->
+                            <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                <legend class="float-none w-auto">Speciality Information</legend>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Speciality <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm "
+                                               data-model-prop="Speciality"
+                                               id="inpSpeciality">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Speciality Description <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm "
+                                               data-model-prop="SpecialtyDescription"
+                                               id="inpSpecialtyDescription">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Taxonomy Code <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm "
+                                               data-model-prop="TaxonomyCode"
+                                               id="inpTaxonomyCode">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Secondary Taxonomy Code</label>
+                                        <input type="text" class="form-control form-control-sm "
+                                               data-model-prop="SecondaryTaxonomyCode"
+                                               id="inpSecondaryTaxonomyCode">
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 mt-2">
+                                <button class="custom-add-btn btn-primary" data-ev="EV_Save_PhysicainMaster">
+                                    <i class="fas fa-save mr-1" data-ev="EV_Save_PhysicainMaster"></i> Save
+                                </button>
+                                <button id="btnDelete" type="button" class="custom-del-btn mx-2" data-ev="EV_Delete" style="display: none;">
+                                    <i class="fa fa-trash mr-1" data-ev="EV_Delete" aria-hidden="true"></i> Delete
+                                </button>
+                            </div>
+                            <div id="inlinealertMessage" class="mt-2 text-danger small"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/js/core.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/select2.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="../common/js/flatDatePicker.js"></script>
+    <script src="../common/js/multiselect.js"></script>
+    <script src="js/manageFacilityPhysician.js"></script>
+</body>
+
+</html>
