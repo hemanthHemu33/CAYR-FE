@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR - Service</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+    <script src="../common/modxCore/js/QCGridConfiguration.js"></script>
+    <link href="../common/css/flatDatePicker.css" rel="stylesheet" />
+    <!--Custom css-->
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        body,
+        html {
+            overflow: scroll;
+            padding-right: 0 !important;
+        }
+
+        .content-wrapper {
+            padding: 6px !important;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .navbar .navbar-menu-wrapper {
+        }
+
+        .btn-link-table {
+            font-weight: bold !important;
+            border: none !important;
+            color: dodgerblue !important;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Footer will stay at the bottom */
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <!--  Main wrapper -->
+            <div class="main-panel">
+                <div class="theme-setting-wrapper">
+                    <div id="theme-settings" class="settings-panel" style="top: 55px !important">
+                        <div class="settings-heading" style="border-bottom: 1px solid #dee2e6;">
+                            Manage Service
+                            <i class="settings-close fas fa-times" data-ev="EV_CloseSubMenu"></i>
+                            <i class="fas fa-ellipsis-v menu-icon mx-4 settings-close d-none" id="dictEllipsisDropdown" data-bs-toggle="dropdown" aria-expanded="true" data-ev="EV_Show_EllipsisMenu"></i>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" id="dictEllipsisMenu" aria-labelledby="dictEllipsisDropdown">
+                            </div>
+                        </div>
+                        <ul class="list-unstyled" id="subMenuList" style="cursor:pointer">
+                            <li class="m-2 custom-dist-codes" value="Manage CPT Service" data-ev="EV_ManageCptService" style="display: none;" id="lm_cptServicesSubMenu">Services</li>
+                            <li class="m-2 custom-dist-codes" value="Manage Service Master" data-ev="EV_ManageServiceMaster" style="background-color:lightgray;display: none;" id="lm_serviceSubMenu">Mange Services</li>
+                            <li class="m-2 custom-dist-codes" value="Manage Facility Service" data-ev="EV_ManageFacilityService" display: none;" id="lm_facilityServicesSubMenu">Facility Services</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="content-wrapper">
+                    <div class="row d-flex menuDiv mt-0">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="manageFacilityGrid" style=" border-right: 1px solid #ddd;">
+                            <div class="control-section custom-margin-dictionary" id="serviceTypeHeader">
+                                <div class="p-1 mt-3">
+                                    <h4 class="gridHeader mt-1">
+                                        <i class="fa-solid fa-notes-medical me-1"></i> Service Type
+                                    </h4>
+                                    <p class="mb-0 text-muted small">
+                                        View information about services type.
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div id="ServiceAccordianIns" class="custom-margin-dictionary  mt-0 mb-0 card border-0 rounded-0 shadow-none px-0  " data-single-open="true">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start p-0 border-0" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="false" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0">
+                                        <div class="ord-acc-inner pt-1 p-3">
+                                            <ul class="list-unstyled mb-0 small" id="ServicesIns"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Separator -->
+                            <div class="separator"></div>
+
+                            <!-- Grid Section -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div id="ClientNoMsg" class="d-none" style="margin-left:200px">
+
+                                    </div>
+                                    <div class="table-bordered cursor-pointer mb-3 custom-margin-dictionary" id="ServicesGrid">
+                                        <!-- Grid content -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Service Type Name  Add-->
+                        <div id="divAddEditMasterService" class="col-lg-4 col-md-3 col-sm-12 pt-3 bg-white in-tkt-modelCntr d-none" data-model="ServiceMasterMeta">
+                            <div class="mngFaclit-header position-relative">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="mb-1">Service Type</h5>
+                                        <p class="mb-0 text-muted small">Add and update services type.</p>
+                                    </div>
+                                    <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdateServiceMaster"></button>
+                                </div>
+                                <div id="divValidateMsgMap" class="error-message mt-2 w-100"></div>
+                            </div>
+                            <!-- Service Master -->
+                            <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                <legend class="float-none w-auto">Service Type Details</legend>
+                                <div class="row">
+
+                                    <div class="d-none" data-model-prop="ServiceTypeID" id="ServiceTypeID" disabled>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Service Type Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" id="inpServiceTypeName" data-model-prop="ServiceTypeName" maxlength="80" autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Description </label>
+                                        <textarea class="form-control form-control-sm" data-model-prop="Description" maxlength="255" autocomplete="off" rows="10" style="resize:vertical;min-height:40px"></textarea>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 mt-2">
+                                <button class="custom-add-btn btn-primary" data-ev="EV_Save" id="btnServiceTypeSave">
+                                    <i class="fas fa-save mr-1" data-ev="EV_Save"></i> Save
+                                </button>
+                                <button id="btnDelete" type="button" class="custom-del-btn mx-2" data-ev="EV_Delete" style="display: none;">
+                                    <i class="fa fa-trash mr-1" data-ev="EV_Delete" aria-hidden="true"></i> Delete
+                                </button>
+                            </div>
+
+                            <!-- Alert -->
+                            <div id="inlinealertMessage" class="mt-2 text-danger small"></div>
+
+                        </div>
+                    </div>
+                    <!-- Service Detail Grid -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-none" id="manageServiceDetailGrid" style=" border-right: 1px solid #ddd;">
+
+                        <!-- Controls Row -->
+                        <div class=" custom-margin-dictionary mt-3" id="ServiceFilter" style="padding:0px">
+
+                            <div class="control-section">
+
+
+                                <div class="p-1 mt-2">
+                                    <h4 class="gridHeader mt-1">
+                                        <i class="fa-solid fa-notes-medical me-1"></i> Service Details
+                                    </h4>
+                                    <p class="mb-0 text-muted small">
+                                        View and manage detailed information about services.
+                                    </p>
+                                </div>
+
+                                <!-- Right: Add Button -->
+                                <button class="custom-add-btn btn-primary" id="btnAddSrvDetail" data-ev="EV_AddServiceDetail" data-toggle="tooltip" title="Add Service Detail">
+                                    <i data-ev="EV_AddServiceDetail" class="fa fa-plus" style="cursor:pointer;"></i> Add Service Detail
+                                </button>
+                            </div>
+                            <div id="ServiceDetailsAccordianIns" class="mt-0 mb-1 card border-0 rounded-0 shadow-none mb-2 px-0  " data-single-open="true">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start p-0 border-0" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="false" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0">
+                                        <div class="ord-acc-inner pt-1 p-3">
+                                            <ul class="list-unstyled mb-0 small" id="ServiceDetailsIns"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Separator -->
+                        <div class="separator"></div>
+
+                        <!-- Grid Section -->
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <div id="ServiceDetial" class="d-none" style="margin-left:200px">
+
+                                </div>
+                                <div class="table-bordered cursor-pointer mb-3 custom-margin-dictionary" id="ServicesDetailsGrid">
+                                    <!-- Grid content -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--add service detail form-->
+                    <!--Add-->
+                    <div id="divAddEditDetailService" class="col-lg-4 col-md-5 col-sm-12 p-3 bg-white in-tkt-modelCntr-Srv d-none" data-model="ServiceDetailMeta">
+                        <div class="mngFaclit-header position-relative">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="">Service Details</h5>
+                                    <p class="mb-0 text-muted small">Add and update services in the service details section.</p>
+                                </div>
+                                <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdateServiceDetial"></button>
+                            </div>
+                            <div id="divValidateMsgSrvDet" class="error-message mt-2 w-100"></div>
+                        </div>
+                        <!-- Physician Details -->
+                        <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                            <legend class="float-none w-auto">Service Details</legend>
+                            <div class="row">
+                                <div class="form-group col-md-9">
+                                    <div class="d-none" data-model-prop="ServiceID" id="ServiceID" disabled> </div>
+                                    <div class="d-none" data-model-prop="ServiceTypeID" id="ServiceTypeID" disabled></div>
+                                    <label>Service Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" data-model-prop="ServiceName" id="inpServiceName" maxlength="80" autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Is Active</label>
+                                    <input class="form-control form-control-sm" type="checkbox" value="" data-model-prop="IsActive" checked="">
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label>Service Description</label>
+                                    <textarea class="form-control form-control-sm"
+                                              data-model-prop="Description"
+                                              maxlength="255"
+                                              autocomplete="off"
+                                              rows="10"
+                                              style="resize:vertical;min-height:40px"></textarea>
+
+                                </div>
+
+                            </div>
+                        </fieldset>
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 mt-2">
+                            <button class="custom-add-btn btn-primary" data-ev="EV_Save_ServiceDetail" id="btnServiceDetailSave">
+                                <i class="fas fa-save mr-1" data-ev="EV_Save_ServiceDetail"></i> Save
+                            </button>
+                            <button id="btnDeleteSrvDet" type="button" class="custom-del-btn mx-2" data-ev="EV_Delete_SrvDet" style="display: none;">
+                                <i class="fa fa-trash mr-1" data-ev="EV_Delete_SrvDet" aria-hidden="true"></i> Delete
+                            </button>
+                        </div>
+
+                        <!-- Alert -->
+                        <div id="inlineServicealertMessage" class="mt-2 text-danger small"></div>
+
+                    </div>
+
+                    <!-- Service CPT Mapping  Start--->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-none" id="manageCPTServiceMappingGrid" style=" border-right: 1px solid #ddd;">
+                        <!-- Controls Row -->
+                        <div class=" custom-margin-dictionary mt-3" id="CptServiceFilter" style="padding:0px">
+                            <div class="control-section">
+                                <div class="p-1 mt-2">
+                                    <h4 class="gridHeader mt-1">
+                                        <i class="fa-solid fa-notes-medical me-1"></i> CPT Details
+                                    </h4>
+                                    <p class="mb-0 text-muted small">
+                                        View and manage detailed information about mapped cpt.
+                                    </p>
+                                </div>
+
+                                <!-- Right: Add Button -->
+                                <button class="custom-add-btn btn-primary" id="btnAddSrvCptMap" data-ev="EV_MapCptService" data-toggle="tooltip" title="Add CPT">
+                                    <i data-ev="EV_MapCptService" class="fa fa-plus" style="cursor:pointer;"></i> Add CPT
+                                </button>
+                            </div>
+                            <div id="ServiceCPTMapAccordianIns" class="mt-0 mb-1 card border-0 rounded-0 shadow-none mb-2 px-0  " data-single-open="true">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start p-0 border-0" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="false" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0">
+                                        <div class="ord-acc-inner pt-1 p-3">
+                                            <ul class="list-unstyled mb-0 small" id="ServiceCPTMapIns"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Separator -->
+                        <div class="separator"></div>
+
+                        <!-- Grid Section -->
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <div id="ServiceDetial" class="d-none" style="margin-left:200px">
+
+                                </div>
+                                <div class="table-bordered cursor-pointer mb-3 custom-margin-dictionary" id="MappedServiceCptGrid">
+                                    <!-- Grid content -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divAddEditServiceCptMap" class="col-lg-4 col-md-5 col-sm-12 p-3 bg-white in-tkt-modelCntr-Srv d-none" data-model="ServiceCPTMeta" style="top:55rem !important">
+                        <div class="mngFaclit-header position-relative">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="">CPT Details</h5>
+                                    <p class="mb-0 text-muted small">Add and update CPT codes along with their descriptions in the Service Details section.</p>
+                                </div>
+                                <button type="button" class="btn-close" aria-label="Close" title="Cancel" data-ev="EV_CloseAddUpdateServiceCptDetial"></button>
+                            </div>
+                            <div id="divValidateMsgCPTSrvMapDet" class="error-message mt-2 w-100"></div>
+                        </div>
+                        <!-- cpt Details -->
+                        <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                            <legend class="float-none w-auto">CPT Details</legend>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="d-none" data-model-prop="ServiceCptCodeID" id="ServiceCptCodeID" disabled> </div>
+
+                                    <label>CPT Code <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" data-model-prop="CptCodes" id="inpServiceCPTCode" maxlength="5" autocomplete="off">
+
+                                </div>
+
+
+                                <!--<div class="form-group col-md-4">
+                                    <label>Start Date</label>
+                                    <input type="text" class="form-control form-control-sm dt flatpickr-input" data-model-prop="StartDate" id="inpStartDate" autocomplete="off" readonly="readonly" placeholder="mm/dd/yyyy">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label> End Date</label>
+                                    <input type="text" class="form-control form-control-sm dt flatpickr-input" data-model-prop="EndDate" id="inpEndDate" autocomplete="off" readonly="readonly" placeholder="mm/dd/yyyy">
+                                </div>-->
+                                <div class="form-group col-md-12">
+                                    <label>Description<span class="text-danger">*</span></label>
+                                    <textarea class="form-control form-control-sm"
+                                              data-model-prop="CptName"
+                                              maxlength="255"
+                                              autocomplete="off"
+                                              rows="10"
+                                              id="CptName"
+                                              style="resize:vertical;min-height:40px"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 mt-2">
+                            <button class="custom-add-btn btn-sm btn-primary" data-ev="EV_Save_CptDetail" id="btnCptDetailSave">
+                                <i class="fas fa-save mr-1" data-ev="EV_Save_CptDetail"></i> Save
+                            </button>
+                        </div>
+ 
+                    </div>
+                    <!-- Serivce CPT Mapping End-->
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/js/core.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="../common/js/flatDatePicker.js"></script>
+    <script src="js/service.js"></script>
+    <script>
+        fetch('orderjs/orderEnteryInstructions.json')
+            .then(resp => resp.json())
+            .then(data => Core.populateInstructions(data))
+            .catch(err => console.error('Error loading instructions:', err));
+        Accordion.init('#ServiceAccordianIns');
+        Accordion.init('#ServiceDetailsAccordianIns');
+        Accordion.init('#ServiceCPTMapAccordianIns');
+        
+    </script>
+</body>
+
+</html>

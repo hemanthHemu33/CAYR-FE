@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR - Order Entry</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+    <link rel="stylesheet" href="css/selectize.css" />
+
+    <link href="../common/css/flatDatePicker.css" rel="stylesheet" />
+    <!--Custom css-->
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        body,
+        html {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding-right: 0 !important;
+        }
+
+        .tab-content {
+            border: none !important;
+        }
+
+        .selectize-dropdown [data-selectable] {
+            padding: 5px 10px;
+        }
+
+        .accordion .ord-acc-header-btn {
+            border: none;
+            background: transparent;
+            padding: 4px 8px;
+            line-height: 1;
+        }
+
+            .accordion .ord-acc-header-btn:hover {
+                opacity: .85;
+            }
+
+        .accordion-button .ord-acc-title {
+            font-weight: 600;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: transparent;
+            outline: none;
+        }
+
+        .table thead th {
+            background: none !important
+        }
+
+        #PatientGrid {
+            color: black !important;
+        }
+    </style>
+
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <div class="main-panel">
+                <!--  Main wrapper -->
+                <div class="wizard-container">
+                    <div class="wizard-header">
+                        <span class="wizard-header-title">
+                            <i class="fa-solid fa-clipboard-list me-2 text-primary"></i>
+                            Order Entry
+
+                            <span class="ms-3 text-muted cursor-pointer d-none" id="btnWorkflowResume" data-ev="Ev_resumeWorkFlow" style="font-size:smaller;color:blue !important;cursor:pointer;font-weight:500">
+                                Back to Workflow
+                                <i class="fa-solid fa-reply me-1 " data-ev="Ev_resumeWorkFlow"></i>
+                            </span>
+                        </span>
+
+                        <span class="wizard-header-sub">
+                            Step <span id="wizard-header-current">1</span> of 6
+                        </span>
+                    </div>
+                    <!-- Steps Bar -->
+                    <div class="wizard-steps-bar mt-1">
+                        <div class="wizard-step active" data-step="1">
+                            <div class="wizard-step-circle" data-ev="Ev_ShowPatientInformation"><i class="fa-solid fa-user" data-ev="Ev_ShowPatientInformation"></i></div>
+                            <div class="wizard-step-label">Patient Information</div>
+                        </div>
+                        <div class="wizard-step" data-step="2">
+                            <div class="wizard-step-circle" data-ev="Ev_ShowPatientInsurance">
+                                <i class="fa-solid fa-id-card" data-ev="Ev_ShowPatientInsurance"></i>
+                            </div>
+                            <div class="wizard-step-label">Patient Insurance</div>
+                        </div>
+                        <div class="wizard-step" data-step="3">
+                            <div class="wizard-step-circle" data-ev="Ev_ShowProviderInfo"><i class="fa-solid fa-user-doctor" data-ev="Ev_ShowProviderInfo"></i></div>
+                            <div class="wizard-step-label">Provider Information</div>
+                        </div>
+                        <div class="wizard-step" data-step="4">
+                            <div class="wizard-step-circle" data-ev="Ev_ShowSrvLocation"><i class="fa-solid fa-location-dot" data-ev="Ev_ShowSrvLocation"></i></div>
+                            <div class="wizard-step-label">Service Location </div>
+                        </div>
+                        <div class="wizard-step" data-step="5">
+                            <div class="wizard-step-circle" data-ev="Ev_Show_OrdInfo"><i class="fa-solid fa-file-medical" data-ev="Ev_Show_OrdInfo"></i></div>
+                            <div class="wizard-step-label">Order Information</div>
+                        </div>
+                        <div class="wizard-step" data-step="6">
+                            <div class="wizard-step-circle">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                            </div>
+                            <div class="wizard-step-label">Preview & Submit</div>
+                        </div>
+                    </div>
+
+                    <div class="wizard-content">
+                        <!-- Navigation Error Message -->
+                        <div id="inlineNavigationAlert">
+                        </div>
+                        <div class="wizard-pane wizard-form-card" data-pane="1">
+
+                            <div class="tab-content" id="patiInfTabContent">
+
+                                <!-- Demographics Tab -->
+                                <div class="tab-pane fade show active" id="pane-demographics" role="tabpanel" aria-labelledby="tab-demographics">
+
+                                    <!-- Instructions Section -->
+                                    <div id="filterAccordianIns" class="ord-accordion mt-0 mb-2 " data-single-open="true" data-model="OrderItemMeta">
+                                        <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <!-- Accordion Header Button -->
+                                                <button class="ord-acc-header flex-grow-1 text-start" id="ordAcc_hdr_0_0" type="button"
+                                                        aria-expanded="false" aria-controls="ordAcc_panel_0_0">
+                                                    <div class="card-header   d-flex align-items-center">
+                                                        <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                        <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Order Instructions</h6>
+                                                    </div>
+                                                    <span class="ord-acc-icons">
+                                                        <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <!-- Accordion Panel -->
+                                            <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0">
+                                                <div class="ord-acc-inner pt-1 p-3">
+                                                    <ul class="list-unstyled mb-0 small" id="PatientInfo"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Demographics Fields  -->
+                                    <div class="patiInf-form">
+                                        <!-- Patient Identification -->
+                                        <fieldset class="patiInf-fieldset border p-3 rounded-2 mb-4 shadow-sm bg-light">
+                                            <legend class="float-none w-auto px-2 text-primary">Patient Identification</legend>
+
+                                            <div class="patiInf-row d-flex flex-wrap align-items-end gap-3" data-model="PatientInformationMeta">
+                                                <!-- Client -->
+                                                <div class="fi d-flex flex-column">
+                                                    <label for="inpOrderClient" class="fw-bold mb-1">Client</label>
+                                                    <select class="form-select form-select-sm" id="inpOrderClient"
+                                                            data-model-prop="ClientID" data-ev="EV_OnChangeClient" aria-label="Select Client">
+                                                        <option value="">Select Client</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Facility Search -->
+                                                <div class="fi facility-search position-relative mb-2">
+                                                    <label for="facilitySearch" class="fw-semibold">Facility</label>
+
+                                                    <input type="text"
+                                                           id="facilitySearch"
+                                                           class="form-control form-control-sm facility-input"
+                                                           placeholder="Select facility"
+                                                           autocomplete="off" />
+
+                                                    <ul id="facilityDropdown"
+                                                        class="facility-dropdown list-group d-none"
+                                                        role="listbox">
+
+                                                        <!-- Inner Search -->
+                                                        <li class="list-group-item facility-inner-search">
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="text"
+                                                                       id="facilityInnerSearch"
+                                                                       class="form-control"
+                                                                       placeholder="Search facility..." autocomplete="off"/>
+                                                                <button type="button"
+                                                                        id="clearFacilitySearch"
+                                                                        class="facility-clear-btn"
+                                                                        aria-label="Clear search">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </li>
+
+                                                        <!-- Loader -->
+                                                        <li id="facilityLoader"
+                                                            class="list-group-item facility-loader d-none">
+                                                            <span class="spinner-border spinner-border-sm text-primary"></span>
+                                                            <span class="ms-2">Searching facilities...</span>
+                                                        </li>
+
+                                                        <!-- Results injected dynamically -->
+                                                    </ul>
+                                                </div>
+
+
+                                                <!-- Search By -->
+                                                <div class="fi d-flex flex-column  mb-2" style="width:200px">
+                                                    <label for="searchType" class="fw-bold mb-1">Search By</label>
+                                                    <select class="form-select form-select-sm" id="searchType" data-ev="Ev_ShowSearchOption" aria-label="Choose search type">
+                                                        <option value="account" selected>Account Number</option>
+                                                        <option value="patientid">CAYR Patient ID</option>
+                                                        <option value="dob">Patient DOB</option>
+                                                        <option value="mrn">MRN</option>
+                                                        <option value="patientname">Patient Name</option>
+                                                        <option value="ssn">SSN</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- MRN (default visible) -->
+                                                <div id="mrnFields" class="fi d-flex flex-column mb-2 d-none" style="width:200px">
+                                                    <label for="inpMRN" class="fw-bold mb-1">MRN</label>
+                                                    <input type="text" class="form-control form-control-sm numeric-only" id="inpMRN"
+                                                           data-model-prop="MRN" maxlength="20" placeholder="Medical Record Number" autocomplete="off">
+                                                </div>
+
+                                                <!-- Account Number -->
+                                                <div id="AccountFields" class="mb-2 fi d-flex flex-column" style="width:200px">
+                                                    <label for="inpAccountNumber" class="fw-bold mb-1">Account Number</label>
+                                                    <input type="text" class="form-control form-control-sm" id="inpAccountNumber"
+                                                           data-model-prop="AccountNumber" maxlength="20" placeholder="Account Number" autocomplete="off">
+                                                </div>
+
+                                                <!-- CAYR Patient ID -->
+                                                <div id="patientIdField" class="mb-2 fi d-flex flex-column d-none" style="width:200px">
+                                                    <label for="inpPatientID" class="fw-bold mb-1">CAYR Patient ID</label>
+                                                    <input type="text" class="form-control form-control-sm numeric-only" id="inpPatientID"
+                                                           data-model-prop="PatientID" maxlength="20" placeholder="CAYR Patient ID" autocomplete="off">
+                                                </div>
+
+                                                <!-- Patient Name -->
+                                                <div id="patientNameField" class="mb-2 fi d-flex flex-column d-none" style="width:200px">
+                                                    <label for="inpPatientName" class="fw-bold mb-1">Patient Name</label>
+
+                                                    <input type="text" class="form-control form-control-sm" id="inpPatientName"
+                                                           data-model-prop="PatientName" maxlength="50" placeholder="Patient Name" autocomplete="off">
+                                                </div>
+
+                                                <!-- Patient DOB -->
+                                                <div id="patientDobField" class="mb-2 fi d-flex flex-column d-none" style="width:200px">
+                                                    <label for="inpDOB" class="fw-bold mb-1">Patient DOB</label>
+                                                    <input type="text" class="form-control form-control-sm dt flatpickr-input " placeholder="mm/dd/yyyy" data-model-prop="PatientDob" id="inpDOB" readonly="readonly" autocomplete="off">
+
+                                                </div>
+
+                                                <!-- SSN -->
+                                                <div id="ssnField" class="mb-2 fi d-flex flex-column d-none" style="width:200px">
+                                                    <label for="inpSSN" class="fw-bold mb-1">SSN</label>
+                                                    <input type="text" class="form-control form-control-sm  "
+                                                           id="inpSSN" data-model-prop="SSN" maxlength="11" autocomplete="off" placeholder="XXX-XX-XXXX" pattern="\d{3}-\d{2}-\d{4}" title="Enter a valid SSN (XXX-XX-XXXX)" oninput="Core.formatSSN(this)">
+                                                </div>
+
+
+                                                <!-- Search button (compact icon-only) -->
+                                                <button type="button"
+                                                        class="custom-add-btn btn-primary"
+                                                        id="btnGetPatientDetail"
+                                                        data-ev="Ev_getPatientInfo"
+                                                        data-toggle="tooltip"
+                                                        title="Search Patient Details"
+                                                        aria-label="Search">
+                                                    <i class="fa-solid fa-magnifying-glass" data-ev="Ev_getPatientInfo" aria-hidden="true"></i>
+                                                </button>
+
+
+                                            </div>
+                                            <div id="NoPatinetMessage" class="mt-2 p-2"></div>
+
+
+                                            <div id="PatientTbl" class="card shadow-sm border-0 mb-3">
+
+                                                <!-- Card Header -->
+                                                <div class="card-header bg-secondary text-black d-flex justify-content-between align-items-center">
+                                                    <h6 class="mb-0">
+                                                        <i class="fa fa-users me-2"></i> Patient List
+                                                    </h6>
+                                                </div>
+
+                                                <!-- Card Body -->
+                                                <div class="card-body p-0">
+                                                    <!-- Table/Grid -->
+                                                    <div class="table-bordered cursor-pointer mb-3 p-2" id="PatientGrid">
+                                                        <div id="PatientGridMessage" class="text-muted text-center py-3">
+                                                            Search to view patient records
+                                                        </div>
+                                                        <!-- Grid content will be injected here -->
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </fieldset>
+
+                                        <!-- Attach Patient Document Section -->
+                                        <div id="patientDocument" class="ord-accordion mt-3 mb-2" data-single-open="true">
+
+                                            <div class="ord-acc-item" id="ord-aac-patientDoc">
+
+                                                <!-- Header -->
+                                                <div class="d-flex justify-content-between align-items-center">
+
+                                                    <!-- Accordion Header Button -->
+                                                    <button class="ord-acc-header flex-grow-1 text-start"
+                                                            id="patAcc_hdr_0"
+                                                            type="button"
+                                                            aria-expanded="false"
+                                                            aria-controls="patAcc_panel_0">
+
+                                                        <span class="ord-acc-title">
+                                                            <i class="fa-solid fa-user me-1"></i> Patient Attached Documents
+                                                        </span>
+
+                                                        <span class="ord-acc-icons">
+                                                            <i class="fa fa-chevron-down ord-acc-chevron"></i>
+                                                        </span>
+                                                    </button>
+
+                                                    <!-- Attach Button  -->
+                                                    <div class="d-flex ms-2 align-items-center">
+                                                        <button id="btnAttachPatientDoc"
+                                                                type="button"
+                                                                class="btn btn-sm btn-outline-primary d-flex"
+                                                                data-toggle="tooltip" data-ev="Ev_attatchPat_OrdDoc"
+                                                                title="Attach Patient Document">
+                                                            <i class="fa-solid fa-paperclip me-1"></i> Attach
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- Accordion Panel -->
+                                                <div id="patAcc_panel_0"
+                                                     class="ord-acc-panel"
+                                                     role="region"
+                                                     aria-labelledby="patAcc_hdr_0"
+                                                     style="max-height: 0px; transition: max-height 250ms; overflow: hidden;">
+
+                                                    <div class="ord-acc-inner">
+                                                        <div class="doc-inline-confirm d-none" id="inlineConfirmPtInf" role="alert" aria-live="assertive">
+                                                            <div class="ic-icon text-danger"><i class="fa fa-exclamation-triangle"></i></div>
+                                                            <div class="ic-content">
+                                                                <div class="ic-msg">Are you sure you want to remove this item?</div>
+                                                            </div>
+                                                            <div class="ic-actions">
+                                                                <button type="button" class="ic-icon-btn" data-ev="EV_ConfirmDelete_doc" data-idx="1" title="Confirm delete" aria-label="Confirm delete">
+                                                                    <i class="fa fa-check-circle text-success ord-icon" data-ev="EV_ConfirmDelete_doc"></i>
+                                                                </button>
+                                                                <button type="button" class="ic-icon-btn text-muted" data-ev="EV_CancelDelet_doc" data-idx="1" title="Cancel delete" aria-label="Cancel delete">
+                                                                    <i class="fa fa-times" data-ev="EV_CancelDelet_doc"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div id="PatientDocHost" class="d-none"></div>
+
+                                                        <!-- Patient Attachments -->
+                                                        <div id="patientDocAttach"
+                                                             class="ord-accordion"
+                                                             data-single-open="true"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Patient Basic Info -->
+                                        <fieldset class="patiInf-fieldset border rounded-3 p-3 mb-4 shadow-sm bg-light">
+                                            <legend class="float-none w-auto px-2 text-primary px-2 text-primary">Patient Information</legend>
+
+                                            <div class="row g-3" data-model="PatientDemographicsMeta">
+                                                <!-- Patient ID -->
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientDetailID" class="">Patient ID</label>
+                                                    <input type="text" class="form-control form-control-sm" data-model-prop="PatientDetailID" id="inpPatientDetailID" disabled>
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label>MRN</label>
+                                                    <input type="text" class="form-control form-control-sm " maxlength="10" data-model-prop="MRN" id="inpMRN">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label>Account Number </label>
+                                                    <input type="text" class="form-control form-control-sm " maxlength="15" data-model-prop="AccountNumber" id="inpAccountNumber">
+                                                </div>
+                                                <!-- Name Fields -->
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientFirstName" class="">First Name <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm" maxlength="40" data-model-prop="PatientFirstName" id="inpPatientFirstName">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientMiddle" class="">Middle Initial</label>
+                                                    <input type="text" class="form-control form-control-sm" maxlength="2" data-model-prop="PatientMiddle" id="inpPatientMiddle">
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientLastName" class="">Last Name <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm" maxlength="40" data-model-prop="PatientLastName" id="inpPatientLastName">
+                                                </div>
+
+                                                <!-- DOB / SSN / Gender -->
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientDOB" class="">Date of Birth <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm dt" placeholder="mm/dd/yyyy" data-model-prop="PatientDOB" id="inpPatientDOB" autocomplete="off">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="fw-bold mb-1 d-flex align-items-center justify-content-between">
+                                                        <span>SSN</span>
+                                                        <i class="fa fa-eye" id="toggleSSN" data-ev="Ev_SSNdata_Toggle" style="cursor:pointer;"></i>
+                                                    </label>
+
+                                                    <span class="d-none" id="unMaskedSSN" data-model-prop="SSN"></span>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm"
+                                                           maxlength="11"
+                                                           data-model-prop="PatientSSN"
+                                                           id="inpPatientSSN"
+                                                           placeholder="XXX-XX-XXXX"
+                                                           pattern="\d{3}-\d{2}-\d{4}"
+                                                           oninput="Core.formatSSN(this)">
+
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientGender" class="">Gender <span class="text-danger">*</span></label>
+                                                    <select class="form-select form-select-sm" data-model-prop="PatientGender" id="inpPatientGender">
+                                                        <option value="">Select</option>
+                                                        <option>Male</option>
+                                                        <option>Female</option>
+                                                        <option>Other</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Contact Info -->
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientPhoneNumber" class="">Phone Number <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm  " maxlength="15" data-model-prop="PatientPhoneNumber" id="inpPatientPhoneNumber" inputmode="numeric" title="Only numeric values allowed" oninput="Core.formatPhone(this)">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label>Email <span class="text-danger">*</span></label>
+                                                    <input type="email" maxlength="80" class="form-control form-control-sm" id="inpPatientEmail" autocomplete="off" data-model-prop="PatientEmail">
+                                                </div>
+
+
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientAddress1" class="">Address 1 <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm" maxlength="60" data-model-prop="PatientAddress1" id="inpPatientAddress1">
+                                                </div>
+
+                                                <!-- Address 2 / City -->
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientAddress2" class="">Address 2</label>
+                                                    <input type="text" class="form-control form-control-sm" maxlength="60" data-model-prop="PatientAddress2" id="inpPatientAddress2">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientCity" class="">City <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm" maxlength="30" data-model-prop="PatientCity" id="inpPatientCity">
+                                                </div>
+
+                                                <!-- State / Zip -->
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientState" class="">State <span class="text-danger">*</span></label>
+                                                    <select class="form-select form-select-sm" id="inpPatientState" data-model-prop="PatientState">
+                                                        <option disabled selected>Select state</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="inpPatientZip" class="">Zip <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm" maxlength="10" data-model-prop="PatientZip" id="inpPatientZip" pattern="\d*" inputmode="numeric" title="Only numeric values allowed" oninput="Core.formatZipCode(this)">
+                                                </div>
+
+
+                                            </div>
+                                        </fieldset>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Insurance section -->
+                        <div class="wizard-pane wizard-form-card d-none" data-pane="2">
+                            <div id="filterAccordianIns" class="ord-accordion mt-0 mb-2 " data-single-open="true" data-model="OrderItemMeta">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="true" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Order Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" style="max-height:230px;">
+                                        <div class="ord-acc-inner pt-1 p-3">
+                                            <ul class="list-unstyled mb-0 small" id="PatientInsurance"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Insurance Tab -->
+                            <div id="pane-insurance" class="tab-pane fade show" role="tabpanel" aria-labelledby="tab-insurance" style="border:none" data-model="PatientInsuranceMeta">
+
+                                <!-- Attach Patient Insurance Document Section -->
+                                <div id="patientInsDocument" class="ord-accordion mt-3 mb-2" data-single-open="true">
+
+                                    <div class="ord-acc-item" id="ord-aac-patientDoc">
+
+                                        <!-- Header -->
+                                        <div class="d-flex justify-content-between align-items-center">
+
+                                            <!-- Accordion Header Button -->
+                                            <button class="ord-acc-header flex-grow-1 text-start"
+                                                    id="patInsAcc_hdr_0"
+                                                    type="button"
+                                                    aria-expanded="false"
+                                                    aria-controls="patInsAcc_panel_0">
+
+                                                <span class="ord-acc-title">
+                                                    <i class="fa-solid fa-user me-1"></i> Patient Insurance Attached Documents
+                                                </span>
+
+                                                <span class="ord-acc-icons">
+                                                    <i class="fa fa-chevron-down ord-acc-chevron"></i>
+                                                </span>
+                                            </button>
+
+                                            <!-- Attach Button  -->
+                                            <div class="d-flex ms-2 align-items-center">
+                                                <button id="btnAttachPatientInsDoc"
+                                                        type="button"
+                                                        class="btn btn-sm btn-outline-primary d-flex"
+                                                        data-toggle="tooltip" data-ev="Ev_attatchPatIns_OrdDoc"
+                                                        title="Attach Patient Insuracne Document">
+                                                    <i class="fa-solid fa-paperclip me-1"></i> Attach
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Accordion Panel -->
+                                        <div id="patInsAcc_panel_0"
+                                             class="ord-acc-panel"
+                                             role="region"
+                                             aria-labelledby="patInsAcc_hdr_0"
+                                             style="max-height: 0px; transition: max-height 250ms; overflow: hidden;">
+
+                                            <div class="ord-acc-inner">
+                                                <div class="doc-inline-confirm d-none" id="inlineConfirmPtInsf" role="alert" aria-live="assertive">
+                                                    <div class="ic-icon text-danger"><i class="fa fa-exclamation-triangle"></i></div>
+                                                    <div class="ic-content">
+                                                        <div class="ic-msg">Are you sure you want to remove this item?</div>
+                                                    </div>
+                                                    <div class="ic-actions">
+                                                        <button type="button" class="ic-icon-btn" data-ev="EV_ConfirmDelete_doc" data-idx="1" title="Confirm delete" aria-label="Confirm delete">
+                                                            <i class="fa fa-check-circle text-success ord-icon" data-ev="EV_ConfirmDelete_doc"></i>
+                                                        </button>
+                                                        <button type="button" class="ic-icon-btn text-muted" data-ev="EV_CancelDelet_doc" data-idx="1" title="Cancel delete" aria-label="Cancel delete">
+                                                            <i class="fa fa-times" data-ev="EV_CancelDelet_doc"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div id="PatientInsDocHost" class="d-none"></div>
+
+                                                <!-- Patient Attachments -->
+                                                <div id="patientInsDocAttach"
+                                                     class="ord-accordion"
+                                                     data-single-open="true"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Policy/Plan Info -->
+                                <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                    <legend class="float-none w-auto px-2 text-primary px-2 text-primary">Policy / Plan Info</legend>
+                                    <input disabled id="PatientDetailIDInsurance" data-model-prop="PatientDetailID" class="d-none" />
+
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12 d-none">
+                                            <label>Patient Insurance ID <span class="text-danger">*</span></label>
+                                            <input disabled class="form-control form-control-sm" id="inpPatientInsuranceID" data-model-prop="PatientInsuranceID" />
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12 d-flex align-items-center">
+                                            <label for="chkDirectBill" class="mb-0 mr-2 font-weight-semibold text-dark">
+                                                Direct Bill To Patient
+                                            </label>
+                                            <input id="chkDirectBill" type="checkbox" class="form-check-input ml-2 mx-2" data-ev="Ev_CheckedDirectBillToMemb">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Insurance Type </label>
+
+                                            <select class="form-select form-select-sm" data-model-prop="InsuranceType" id="inpInsuranceType">
+                                                <option value="">Select</option>
+                                                <option value="Commercial">Commercial</option>
+                                                <option value="Government">Government</option>
+                                                <option value="Medicaid">Medicaid</option>
+                                                <option value="Medicare">Medicare</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>CoInsurance Type</label>
+                                            <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="CoInsuranceType" id="inpCoInsuranceType" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Insurance Priority <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" data-model-prop="InsurancePriority" id="inpInsurancePriority">
+                                                <option value="">Select</option>
+                                                <option value="Primary">Primary</option>
+                                                <option value="Secondary">Secondary</option>
+                                                <option value="Tertiary">Tertiary</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Plan Type <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" data-model-prop="PlanType" id="inpPlanType">
+                                                <option value="">Select</option>
+                                                <option value="HMO">HMO</option>
+                                                <option value="PPO">PPO</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Insurance Plan ID <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="InsurancePlanID" id="inpInsurancePlanID" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Insurance Plan Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="InsurancePlanName" id="inpInsurancePlanName">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Policy Number <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="PolicyNumber" id="inpPolicyNumber">
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <!-- Government IDs -->
+                                <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                    <legend class="float-none w-auto px-2 text-primary px-2 text-primary">Government IDs</legend>
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Medicare No </label>
+                                            <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="MedicareNo" id="inpMEDICARENO" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Medicaid No</label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="MedicaidNo" id="inpMedicaidNo">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Medicare Carrier <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="MedicareCarrier" id="inpMedicareCarrier">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>MBI <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="MBI" id="inpMBI">
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <!-- Member/Subscriber Info -->
+                                <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                    <legend class="float-none w-auto px-2 text-primary px-2 text-primary">Member / Subscriber Info</legend>
+                                    <div class="row">
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Member ID  </label>
+                                            <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="MemberId" id="inpMemberId" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Subscriber ID  </label>
+                                            <input type="text" class="form-control form-control-sm numeric-only" data-model-prop="SubscriberId" id="inpSubscriberId" pattern="\d*" inputmode="numeric" title="Only numeric values allowed">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Member Relationship <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" data-model-prop="MemberRelationship" id="inpMemberRelationship">
+                                                <option value="">Select</option>
+                                                <option value="Child">Child</option>
+                                                <option value="Father">Father</option>
+                                                <option value="Mother">Mother</option>
+                                                <option value="Self">Self</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Eligibility Status <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" data-model-prop="EligibilityStatus" id="inpEligibilityStatus">
+                                                <option value="">Select</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">InActive</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Eligibility Start Date <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm dt" data-model-prop="EligibilityStartDate" id="inpEligibilityStartDate" placeholder="mm/dd/yyyy">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Eligibility End Date <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm dt" data-model-prop="EligibilityEndDate" id="inpEligibilityEndDate" placeholder="mm/dd/yyyy">
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+
+                                <!-- Group/Employer Info -->
+                                <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                    <legend class="float-none w-auto px-2 text-primary px-2 text-primary">Group / Employer Info</legend>
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Group Number <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="GroupNumber" id="inpGroupNumber">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Group Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="GroupName" id="inpGroupName">
+                                        </div>
+
+                                    </div>
+
+                                </fieldset>
+
+                                <!-- Insurance Company Info -->
+                                <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                    <legend class="float-none w-auto px-2 text-primary px-2 text-primary">Insurance Company Info</legend>
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Insurance Company Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="InsuranceCompanyName" id="inpInsuranceCompanyName">
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                            <label>Insurance Co Phone Number <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="InsuranceCoPhoneNumber" id="inpInsuranceCoPhoneNumber" title="Only numeric values allowed" oninput="Core.formatPhone(this)">
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+
+
+                                    </div>
+                                </fieldset>
+
+                                <!-- Primary Insured Info -->
+                                <fieldset class="facility-fieldset border p-2 rounded mb-3" data-model="PrimaryInsuredMeta">
+                                    <legend class="float-none w-100 px-2 d-flex justify-content-between align-items-center">
+                                        <span class="float-none w-auto px-2 text-primary px-2 text-primary">Primary Insured</span>
+                                        <span class="form-check mb-0">
+                                            <input class="form-check-input" type="checkbox" id="chkSameAsPatient" data-ev="Ev_SameAsPatient">
+                                            <label class="float-none w-auto px-2 text-primary px-2 text-primary" for="chkSameAsPatient">
+                                                Same as the Patient
+                                            </label>
+                                        </span>
+                                    </legend>
+                                    <div class="row">
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>First Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredFName" id="inpPrimaryInsuredFName">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Middle Name</label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredMName" id="inpPrimaryInsuredMName">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Last Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredLName" id="inpPrimaryInsuredLName">
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Relationship <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" data-model-prop="PrimaryInsuredRelationship" id="inpPrimaryInsuredRelationship">
+                                                <option value="">Select</option>
+                                                <option value="Child">Child</option>
+                                                <option value="Father">Father</option>
+                                                <option value="Mother">Mother</option>
+                                                <option value="Self">Self</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>DOB <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm dt" data-model-prop="PrimaryInsuredDOB" id="inpPrimaryInsuredDOB" placeholder="mm/dd/yyyy">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Street Address 1 <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredStreetAddress1" id="inpPrimaryInsuredStreetAddress1">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Street Address 2</label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredStreetAddress2" id="inpPrimaryInsuredStreetAddress2">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>City <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" data-model-prop="PrimaryInsuredAddressCity" id="inpPrimaryInsuredAddressCity">
+                                        </div>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>State <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" id="inpPrimaryInsuredAddressState" data-model-prop="PrimaryInsuredAddressState" style="height:28px">
+                                                <option disabled selected>Select state</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <label>Zip <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm " maxlength="10" data-model-prop="PrimaryInsuredAddressZip" id="inpPrimaryInsuredAddressZip" pattern="\d*" inputmode="numeric" title="Only numeric values allowed" oninput="Core.formatZipCode(this)">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <!--Provider section (Physicia/Nurse)-->
+                        <div class="wizard-pane wizard-form-card d-none" data-pane="3">
+                            <div class="tab-pane fade show active" id="pane-demographics" role="tabpanel" aria-labelledby="tab-demographics">
+                                <!-- Instructions Section -->
+                                <div id="filterAccordiansrvLoc" class="ord-accordion mt-0 mb-2 " data-single-open="true" data-model="OrderItemMeta">
+                                    <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <!-- Accordion Header Button -->
+                                            <button class="ord-acc-header flex-grow-1 text-start" id="ordAcc_hdr_0_0" type="button"
+                                                    aria-expanded="true" aria-controls="ordAcc_panel_0_0">
+                                                <div class="card-header   d-flex align-items-center">
+                                                    <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                    <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Order Instructions</h6>
+                                                </div>
+                                                <span class="ord-acc-icons">
+                                                    <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+
+
+                                        <!-- Accordion Panel -->
+                                        <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" style="max-height:230px;">
+                                            <div class="ord-acc-inner pt-1 p-3">
+                                                <ul class="list-unstyled mb-0 small" id="ProviderInformation"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Demographics Fields  -->
+                                <div class="patiInf-form">
+
+                                    <!-- Ordering Physician -->
+                                    <fieldset class="patiInf-fieldset border p-2 rounded mb-3" data-model="PhysicianInfoMeta">
+                                        <legend class="float-none w-auto px-2 text-primary">Ordering Physician</legend>
+                                        <div class="row">
+                                            <div class="form-group col-md-3 position-relative">
+                                                <label>Physician NPI <span class="text-danger">*</span></label>
+
+                                                <input type="text"
+                                                       class="form-control form-control-sm"
+                                                       id="OrderingNpi"
+                                                       autocomplete="off"
+                                                       placeholder="Enter NPI or Name...">
+
+                                                <!-- Dropdown for physician list -->
+                                                <ul id="physicianDropdown"
+                                                    class="list-group position-absolute d-none"
+                                                    style="top: 100%; z-index: 2000; max-height: 12rem; border-radius: 4px; overflow-y: auto; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+
+                                                    <!-- Loader row -->
+                                                    <li id="physicianLoader" class="list-group-item text-center d-none">
+                                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        <span class="ms-2">Searching...</span>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+
+
+
+
+                                            <div class="form-group col-md-2">
+                                                <label>Credential</label>
+                                                <input type="text" class="form-control form-control-sm" data-model-prop="Credential" id="inpCredential" disabled>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Physician Name</label>
+                                                <input type="text" class="form-control form-control-sm" data-model-prop="PhysicianName" id="inpPhysicianName" disabled>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label>
+                                                    Speciality
+                                                </label>
+                                                <input type="text" class="form-control form-control-sm" data-model-prop="Speciality" id="inpSpeciality" disabled>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                    <div id="physicianMsgContainer" class="mt-3"></div>
+                                    <div id="inlinePhysMappConfiramtion" class="mt-3"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <!-- Service loacation information-->
+                        <div class="wizard-pane wizard-form-card d-none" data-pane="4">
+                            <div class="tab-pane fade show active" id="pane-demographics" role="tabpanel" aria-labelledby="tab-serviceLoaction">
+                                <!-- Instructions Section -->
+                                <div id="filterAccordiansrvLoc" class="ord-accordion mt-0 mb-2 " data-single-open="true" data-model="OrderItemMeta">
+                                    <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <!-- Accordion Header Button -->
+                                            <button class="ord-acc-header flex-grow-1 text-start" id="ordAcc_hdr_0_0" type="button"
+                                                    aria-expanded="false" aria-controls="ordAcc_panel_0_0">
+                                                <div class="card-header   d-flex align-items-center">
+                                                    <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                    <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Order Instructions</h6>
+                                                </div>
+                                                <span class="ord-acc-icons">
+                                                    <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Accordion Panel -->
+                                        <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" style="max-height:230px;">
+                                            <div class="ord-acc-inner pt-1 p-3">
+                                                <ul class="list-unstyled mb-0 small" id="ServiceLocation"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Service location Fields  -->
+                                <div class="patiInf-form">
+                                    <fieldset class="patiInf-fieldset border p-2 rounded mb-3">
+                                        <legend class="float-none w-auto px-2 text-primary">Service Location & Patient Room</legend>
+                                        <div class="row" data-model="OrderServiceLocation">
+                                            <div class="form-group col-md-4">
+                                                <label>Service Location Code  </label>
+                                                <!--<input type="text" class="form-control form-control-sm" data-model-prop="ServiceLocationCode" id="inpServiceLocationCode">-->
+                                                <select class="form-select form-select-sm" data-model-prop="ServiceLocationCode" id="inpServiceLocationCode">
+                                                    <option value="">-- Select Service Location --</option>
+                                                    <option value="01">01: Pharmacy</option>
+                                                    <option value="02">02: Telehealth Provided Other Than in Patient's Home</option>
+                                                    <option value="03">03: School</option>
+                                                    <option value="04">04: Homeless Shelter</option>
+                                                    <option value="11">11: Office</option>
+                                                    <option value="12">12: Home</option>
+                                                    <option value="15">15: Mobile Unit</option>
+                                                    <option value="17">17: Walk-in Retail Health Clinic</option>
+                                                    <option value="19">19: Off Campus-Outpatient Hospital</option>
+                                                    <option value="20">20: Urgent Care Facility</option>
+                                                    <option value="21">21: Inpatient Hospital</option>
+                                                    <option value="22">22: On Campus-Outpatient Hospital</option>
+                                                    <option value="23">23: Emergency Room – Hospital</option>
+                                                    <option value="24">24: Ambulatory Surgical Center</option>
+                                                    <option value="31">31: Skilled Nursing Facility</option>
+                                                    <option value="32">32: Nursing Facility</option>
+                                                    <option value="50">50: Federally Qualified Health Center</option>
+                                                    <option value="72">72: Rural Health Clinic</option>
+                                                </select>
+
+
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Service Location Type  </label>
+                                                <input type="text" class="form-control form-control-sm" data-model-prop="ServiceLocationType" id="inpServiceLocationType" disabled>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Service Location Name  </label>
+                                                <input type="text" class="form-control form-control-sm" data-model-prop="ServiceLocationName" id="inpServiceLocationName" disabled>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Service Location Unit</label>
+                                                <input type="text"
+                                                       class="form-control form-control-sm"
+                                                       data-model-prop="ServiceLocationUnit"
+                                                       id="inpServiceLocationUnit"
+                                                       oninput="Orders.formatRoomOrService(this)">
+                                            </div>
+
+                                            <div class="form-group col-md-4">
+                                                <label>Patient Room Number</label>
+                                                <input type="text"
+                                                       class="form-control form-control-sm"
+                                                       data-model-prop="PatientRoomNumber"
+                                                       id="inpPatientRoomNumber"
+                                                       oninput="Orders.formatRoomOrService(this)">
+                                            </div>
+
+                                            <div class="form-group col-md-4">
+                                                <label>Patient Bed  </label>
+                                                <input type="text" class="form-control form-control-sm" data-model-prop="PatientBed" id="inpPatientBed">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--Order Item Information-->
+                        <div class="wizard-pane wizard-form-card d-none" data-pane="5">
+                            <!-- Order Instructions Section -->
+                            <div id="filterAccordianOrderItem" class="ord-accordion mt-0 mb-2 " data-single-open="true" data-model="OrderItemMeta">
+                                <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Accordion Header Button -->
+                                        <button class="ord-acc-header flex-grow-1 text-start" id="ordAcc_hdr_0_0" type="button"
+                                                aria-expanded="true" aria-controls="ordAcc_panel_0_0">
+                                            <div class="card-header   d-flex align-items-center">
+                                                <i class="fa-solid fa-circle-info me-2 text-primary"></i>
+                                                <h6 class="mb-0 text-primary" style="font-size: small;font-weight: 600;">Order Instructions</h6>
+                                            </div>
+                                            <span class="ord-acc-icons">
+                                                <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+
+                                    <!-- Accordion Panel -->
+                                    <div id="ordAcc_panel_0_0" class="ord-acc-panel" role="region"
+                                         aria-labelledby="ordAcc_hdr_0" style="max-height:230px;">
+                                        <div class="ord-acc-inner pt-0 px-0">
+                                            <div class="card-body p-3">
+                                                <ul class="list-unstyled mb-0 small" id="OrderInformation"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card  ">
+                                <!-- Card Header -->
+                                <!-- Header: -->
+                                <div class="ord-card-header ">
+                                    <!-- Top row -->
+                                    <div class="ord-hdr-left">
+                                        <span class="ord-number">
+                                            <span class="ord-number-label">Order Number:</span>
+                                            <strong id="orderNumber" style="font-size:small">--</strong>
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <button class=" btn btn-sm" id="btnAddOrderItem" data-ev="Ev_add_NewOrderItm">
+                                            <i class="fa-solid fa-plus me-1" aria-hidden="true" data-ev="Ev_add_NewOrderItm"></i>
+                                            Add Order Item
+                                        </button>
+                                        <!--<input type="file" id="orderDocUploader" accept=".png, .jpg, .jpeg,.pdf" class="d-none">-->
+                                        <button class="btn btn-sm btn-outline-primary" id="btnAttachOrdDoc" data-ev="Ev_attatch_OrdDoc">
+                                            <i class="fa-solid fa-paperclip me-1" aria-hidden="true" data-ev="Ev_attatch_OrdDoc"></i>
+                                            Attach Document
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                                <!-- Bottom row: small meta + recurring controls -->
+                                <div class="ord-hdr-row ord-hdr-row-meta" data-model="ClientInformation" role="region" aria-label="Client Information">
+                                    <div class="ord-meta">
+                                        <div class="ord-meta-line text-muted">
+                                            <ul class="ord-meta list-unstyled mb-0" style="font-size: small;">
+                                                <li>
+                                                    <i class="fa fa-user text-muted me-1"></i>
+                                                    <span>Client:</span>
+                                                    <strong id="clientName" class="mx-1" style="font-size:smaller">--</strong>
+                                                </li>
+                                                <li>
+                                                    <i class="fa fa-hospital text-muted me-1"></i>
+                                                    <span>Facility:</span>
+                                                    <strong id="facilityName" class="mx-1" style="font-size:smaller">--</strong>
+                                                </li>
+                                                <li>
+                                                    <i class="fa fa-user-md text-muted me-1"></i>
+                                                    <span>Provider:</span>
+                                                    <strong id="providerName" class="mx-1" style="font-size:smaller">--</strong>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="ord-recurring inline-group">
+                                        <label class="ord-recurring-field">
+                                            <small class="ord-mini-label" id="hdrRecurringFrequencyLbl">Frequency  </small>
+                                            <select id="hdrRecurringFrequency" class="form-select form-select-sm" data-model-prop="RecurringFrequency">
+                                                <option value="">Select</option>
+                                                <option value="Weekly">Weekly</option>
+                                                <option value="Every 2 weeks">Every 2 weeks</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="Quarterly">Quarterly</option>
+                                                <option value="Every 6 months">Every 6 months</option>
+                                                <option value="Yearly">Yearly</option>
+                                            </select>
+                                        </label>
+
+                                        <label class="ord-recurring-field">
+                                            <small class="ord-mini-label" id="hdrRecurringEndDatelbl">End Date </small>
+                                            <input id="hdrRecurringEndDate" type="text" class="form-control form-control-sm dt"
+                                                   placeholder="mm/dd/yyyy" data-model-prop="RecurringEndDate" autocomplete="off" />
+                                        </label>
+                                        <div class="form-group mb-0 mx-2" id="IsRecurringHeader" style="text-align: center;">
+                                            <label class="mb-0 ord-mini-label">
+                                                Repeat Order
+                                            </label>
+                                            <div>
+                                                <input class="form-control form-control-sm"
+                                                       type="checkbox"
+                                                       id="hdrIsRecurring"
+                                                       data-model-prop="IsRecurring"
+                                                       data-ev="EV_ToggleHdrRecurring" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+
+
+                                <div class="card-body">
+                                    <!--Attached document section-->
+                                    <div id="attach document" class="ord-accordion mt-3 mb-2" data-single-open="true" data-model="OrderItemMeta">
+                                        <div class="ord-acc-item" id="ord-aac-atchDoc">
+                                            <button class="ord-acc-header" id="ordAcc_hdr_0" type="button" aria-expanded="false" aria-controls="ordAcc_panel_0">
+                                                <span class="ord-acc-title"><i class="fa-solid fa-paperclip me-1"></i> Attatched Document</span>
+                                                <span class="ord-acc-icons">
+                                                    <i class="fa fa-chevron-down ord-acc-chevron" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                            <div id="ordAcc_panel_0" class="ord-acc-panel" role="region" aria-labelledby="ordAcc_hdr_0" style="max-height: 0px;">
+                                                <div class="ord-acc-inner">
+                                                    <div class="doc-inline-confirm d-none" id="inlineConfirm" role="alert" aria-live="assertive">
+                                                        <div class="ic-icon text-danger"><i class="fa fa-exclamation-triangle"></i></div>
+                                                        <div class="ic-content">
+                                                            <div class="ic-msg">Are you sure you want to remove this item?</div>
+                                                        </div>
+                                                        <div class="ic-actions">
+                                                            <button type="button" class="ic-icon-btn" data-ev="EV_ConfirmDelete_doc" data-idx="1" title="Confirm delete" aria-label="Confirm delete">
+                                                                <i class="fa fa-check-circle text-success ord-icon" data-ev="EV_ConfirmDelete_doc"></i>
+                                                            </button>
+                                                            <button type="button" class="ic-icon-btn text-muted" data-ev="EV_CancelDelet_doc" data-idx="1" title="Cancel delete" aria-label="Cancel delete">
+                                                                <i class="fa fa-times" data-ev="EV_CancelDelet_doc"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div id="OrderDraftDocHost" class="d-none">
+                                                    </div>
+                                                    <div id="orderDocAttach" class="ord-accordion" data-single-open="true" data-model="OrderDocumentMeta"></div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Host container for dynamic accordion items -->
+                                    <div id="orderItm" class="ord-accordion" data-single-open="true" data-model="OrderItemMeta"></div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <!--Provider section-->
+                        <div class="wizard-pane wizard-form-card d-none" data-pane="6">
+                            <div class="row" id="OrderPreviewSection">
+                                <!-- ORDER PREVIEW -->
+                                <div class="ordPrv" id="orderPreview">
+                                    <header class="ordPrv-header">
+                                        <h1 class="ordPrv-title">ORDER SUMMARY</h1>
+                                        <div class="ordPrv-topMeta">
+                                            <div><span class="ordPrv-k">Order Number:</span> <span class="ordPrv-v" id="OrderNumber">--</span></div>
+                                            <div><span class="ordPrv-k">Date:</span> <span class="ordPrv-v" id="OrderDate">--</span></div>
+                                        </div>
+                                    </header>
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- PATIENT -->
+                                    <section class="ordPrv-section">
+                                        <div class="ordPrv-line ordPrv-grid3">
+                                            <div class="ordPrv-k">Patient:</div>
+                                            <div class="ordPrv-v" id="PatientName">--</div>
+
+                                            <div class="ordPrv-k">DOB:</div>
+                                            <div class="ordPrv-v" id="DOB">--</div>
+
+                                            <div class="ordPrv-k">MRN:</div>
+                                            <div class="ordPrv-v" id="MRN">--</div>
+                                        </div>
+                                    </section>
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- PROVIDER -->
+                                    <section class="ordPrv-section">
+                                        <div class="ordPrv-line ordPrv-grid3">
+                                            <div class="ordPrv-k">Ordering Provider:</div>
+                                            <div class="ordPrv-v" id="ProviderName">--</div>
+
+                                            <div class="ordPrv-k">NPI:</div>
+                                            <div class="ordPrv-v" id="NPI">--</div>
+                                        </div>
+                                    </section>
+
+                                    <hr class="ordPrv-rule" />
+                                    <!-- ORDER SUMMARY -->
+                                    <section class="ordPrv-section">
+                                        <h2 class="ordPrv-h2">Order Summary</h2>
+                                        <!-- Host to render into -->
+                                        <div id="orderItemsHost"></div>
+                                    </section>
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- SCHEDULING -->
+                                    <!-- Right side: Service Location   -->
+                                    <section class="ordPrv-section">
+                                        <div class="ordPrv-line ordPrv-grid2">
+                                            <div class="ordPrv-k">Service Location:</div>
+                                            <div class="ordPrv-v" id="Location">--</div>
+                                        </div>
+                                    </section>
+
+                                    <!-- Right side: Documents   -->
+                                    <section class="ordPrv-section" id="ordPrv-docs-section">
+                                        <div class="ordPrv-line ordPrv-grid2">
+                                            <div class="ordPrv-k">Documents:</div>
+                                            <div class="ordPrv-v">
+                                                <ul id="orderDocsHost" class="ordPrv-docs list-unstyled mb-0"></ul>
+                                                <div id="orderDocsEmpty" class="text-muted small">No documents uploaded.</div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+
+                                    <hr class="ordPrv-rule" />
+
+                                    <!-- FOOTER -->
+                                    <footer class="ordPrv-footer">
+                                        <div class="ordPrv-grid2 d-flex justify-content-between align-items-start flex-wrap">
+
+                                            <!-- Left Section : Submitted info -->
+                                            <div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">Submitted by:</div>
+                                                    <div class="ordPrv-v mx-2" id="SubmittedBy">--</div>
+                                                </div>
+                                                <div class="d-flex">
+                                                    <div class="ordPrv-k">Date/Time:</div>
+                                                    <div class="ordPrv-v mx-2" id="OrderDate_submit">--</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Right Section : Recurring Details -->
+                                            <div class="ms-auto   d-none" id="headerReccuring">
+                                                <div class="ordPrv-k fw-bold mb-1">Recurring Details</div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">Is Recurring:</div>
+                                                    <div class="ordPrv-v mx-2" id="IsRecurring">--</div>
+                                                </div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">Frequency:</div>
+                                                    <div class="ordPrv-v mx-2" id="RecurringFrequency">--</div>
+                                                </div>
+                                                <div class="d-flex mb-2">
+                                                    <div class="ordPrv-k">End Date:</div>
+                                                    <div class="ordPrv-v mx-2" id="RecurringEndDate">--</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </footer>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="wizard-footer   pt-3 border-top mt-4">
+                        <button type="button"
+                                id="btnCancelOrder"
+                                data-ev="EV_Cancel_Ord"
+                                class="custom-del-btn btn-outline-danger d-none"
+                                style="border-radius:6px;">
+                            <i class="fas fa-trash me-1" data-ev="EV_Cancel_Ord"></i> Cancel Order
+                        </button>
+                        <!-- Error Message -->
+                        <div id="orderErrorMsg" class="px-3 mb-0 flex-grow-1 me-3  ">
+                            <!-- Error text dynamically inserted here -->
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="wizard-actions text-end d-flex gap-2">
+                            <!-- Previous -->
+                            <button type="button"
+                                    data-ev="EV_PrevStep"
+                                    class="custom-add-btn btn-light wizard-prev"
+                                    disabled>
+                                <i class="fas fa-chevron-left me-2" data-ev="EV_PrevStep"></i> Previous
+                            </button>
+
+                            <!-- Save & Next -->
+                            <button type="button" id="btnSaveOrder" data-ev="EV_Save" class="custom-add-btn btn-outline-primary" style="border-radius:6px;">
+                                <i class="fas fa-save me-2" data-ev="EV_Save"></i> Save &amp; Next
+                            </button>
+                            <button type="button"
+                                    id="btnSubmitOrder"
+                                    data-ev="EV_SubmitOrder"
+                                    class="custom-add-btn btn-outline-info"
+                                    style="border-radius: 6px;">
+                                <i class="fa fa-save ms-1" data-ev="EV_SubmitOrder"></i> Submit
+                            </button>
+                        </div>
+                    </div>
+
+                    <!---It will be role based FE-->
+                    <div class=" pt-1 border-top mt-4 d-none" id="cancelNotesDiv">
+                        <div class="px-2">
+                            <h6 class="mb-0 text-primary fw-semibold">Add Cancellation Notes</h6>
+                            <p class="mb-0 text-muted small">
+                                Please provide a clear reason for cancelling this order.
+                            </p>
+                        </div>
+                        <div class="form-group px-2">
+                            <textarea class="form-control form-control-sm" autocomplete="off" rows="10" style="resize:vertical;min-height:40px" id="CancelNotes" placeholder="Enter Cancellation Reason"></textarea>
+                        </div>
+                        <div class="float-end">
+
+                            <button type="button" id="btnSaveCancelRsn" data-ev="EV_Save_CancelRsn" class="custom-add-btn btn-light">
+                                <i class="fas fa-times-circle " data-ev="EV_Save_CancelRsn"></i> Cancel
+                            </button>
+                            <button type="button" id="btnCancelRsn" data-ev="EV_SaveCancelRsn" class="custom-add-btn btn-outline-primary">
+                                <i class="fas fa-save me-2" data-ev="EV_SaveCancelRsn"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/js/core.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="../common/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).on('input', 'input[type="text"].numeric-only', function () {
+            this.value = (this.value || '').replace(/\D/g, '');
+        });
+    </script>
+    <script src="../common/js/flatDatePicker.js"></script>
+    <script src="js/orderEntry.js"></script>
+    <script src="orderjs/orderLab.js"></script>
+    <script src="orderjs/orderImaging.js"></script>
+    <script src="orderjs/orderNursing.js"></script>
+    <script src="orderjs/homeHealth.js"></script>
+    <script src="orderjs/OrderInformation.js"></script>
+    <script>
+        fetch('orderjs/orderEnteryInstructions.json')
+            .then(resp => resp.json())
+            .then(data => Orders.populateInstructions(data))
+            .catch(err => console.error('Error loading instructions:', err));
+    </script>
+
+</body>
+
+</html>

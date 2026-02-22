@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR - WorkQueue</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+
+    <!--Custom css-->
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        body,
+        html {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding-right: 0 !important;
+        }
+
+        .tab-content {
+            border: none !important;
+        }
+    </style>
+
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <div class="main-panel">
+                <!--  Main wrapper -->
+
+                <div class="theme-setting-wrapper">
+                    <div id="theme-settings" class="settings-panel" style="top: 55px !important">
+                        <div class="settings-heading" style="border-bottom: 1px solid #dee2e6;">
+                            WorkQueue
+                            <i class="settings-close fas fa-times" data-ev="EV_CloseSubMenu"></i>
+                            <i class="fas fa-ellipsis-v menu-icon mx-4 settings-close d-none" id="dictEllipsisDropdown" data-bs-toggle="dropdown" aria-expanded="true" data-ev="EV_Show_EllipsisMenu"></i>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" id="dictEllipsisMenu" aria-labelledby="dictEllipsisDropdown">
+                            </div>
+                        </div>
+
+                        <div class="wfs-accordion" id="subMenuList">
+
+                            <!-- ============================= -->
+                            <!-- State Configuration -->
+                            <!-- ============================= -->
+                            <div class="wfs-accordion-item" id="lm_WorkQueueStatus">
+
+                                <div class="wfs-accordion-header active"
+                                    
+                                     data-target="workFlowStatusList">
+
+                                    <div class="wfs-accordion-title"   >
+                                        <i class="fa fa-cogs wfs-accordion-icon"   ></i>
+                                        <span data-ev="Ev_ShowStatusConfiguration">State Configuration</span>
+                                    </div>
+
+                                    <div class="wfs-accordion-actions" data-ev="EV_ToggleAccordion">
+                                         
+                                        <i class="fa fa-chevron-down wfs-accordion-arrow" data-ev="EV_ToggleAccordion"></i>
+                                    </div>
+                                </div>
+
+                              
+                                    <ul class=" wfs-accordion-body wfs-workqueue-list open" id="workFlowStatusList">
+                                        <!--System Configured WorkList-->
+                                    </ul>
+                          
+                            </div>
+
+                            <!-- ============================= -->
+                            <!-- Work Queue -->
+                            <!-- ============================= -->
+                            <div class="wfs-accordion-item" id="lm_WorkQueue">
+                                <div class="wfs-accordion-header "
+                                    
+                                     data-target="workQueueList">
+
+                                    <div class="wfs-accordion-title" >
+                                        <i class="fa fa-layer-group wfs-accordion-icon" ></i>
+                                        <span data-ev="Ev_ShowWorkQueue">Work Queues</span>
+                                    </div>
+
+                                    <div class="wfs-accordion-actions" data-ev="EV_ToggleAccordion">
+                                        
+                                        <i class="fa fa-chevron-down wfs-accordion-arrow" data-ev="EV_ToggleAccordion"></i>
+                                    </div>
+                                </div>
+
+                                <div class="wfs-accordion-body" id="workQueueList">
+
+                                    <!-- Standard Queues -->
+                                    <div class="wfs-workqueue-section">
+                                        <div class="wfs-workqueue-section-header">
+                                            <i class="fa fa-thumbtack"></i>
+                                            <span>Standard Work Queues</span>
+                                        </div>
+
+                                        <ul class="wfs-workqueue-list" id="systemConfiguredWorkList">
+                                            <!--System Configured WorkList-->
+                                        </ul>
+                                    </div>
+
+                                    <!-- Custom Queues -->
+                                    <div class="wfs-workqueue-section wfs-workqueue-section-custom">
+                                        <div class="wfs-workqueue-section-header">
+                                            <i class="fa fa-sliders-h"></i>
+                                            <span>Custom Designed Work Queues</span>
+                                        </div>
+
+                                        <ul class="wfs-workqueue-list" id="workQueueChildList"></ul>
+
+                                        <div class="wfs-workqueue-empty" id="customWorkQueueEmpty">
+                                            <i class="fa fa-inbox"></i>
+                                            <span>No custom work queues created yet</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ============================= -->
+                <!-- WorkFlow State Configuration -->
+                <!-- ============================= -->
+                <div class="wfs-config-container custom-margin-dictionary mt-4" id="WorkFlowStatusMainSection">
+
+                    <!-- ============================= -->
+                    <!-- Header -->
+                    <!-- ============================= -->
+                    <div class="wfs-config-header">
+                        <div class="wfs-config-title">
+                            <i class="fa fa-cogs"></i> WorkFlow State Configuration
+                        </div>
+
+                    </div>
+
+                    <!-- ============================= -->
+                    <!-- STEP 1: Define WorkFlow State -->
+                    <!-- ============================= -->
+                    <div class="wfs-step-card" data-model="WorkFlowStatusMeta">
+                        <div class="wfs-step-header d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span class="wfs-step-number">1</span>
+                                <span class="wfs-step-title">Define WorkFlow State</span>
+                            </div>
+                            <div id="workQStateMsg" class="mt-2 p-2"></div>
+                            <button type="button" class="btn btn-primary btn-sm m-0" data-ev="Ev_AddWorkFlowState">
+                                <i class="fa fa-plus"></i> Add State
+                            </button>
+
+                        </div>
+                        <div class="wfs-step-body">
+                            <input type="hidden" data-model-prop="WorkflowStateID" id="WorkflowStateID" />
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">
+                                            WorkFlow State <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               data-model-prop="WorkflowState"
+                                               id="txtWorkFlowStatus"
+                                               placeholder="Enter WorkFlow State" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">
+                                            Description <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               data-model-prop="Description"
+                                               id="txtWorkFlowStatusDescription"
+                                               placeholder="Enter description" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wfs-step-actions">
+
+                                <button class="btn btn-primary btn-sm" data-ev="EV_SaveWorkflowState">
+                                    <i class="fa fa-save" data-ev="EV_SaveWorkflowState"></i> Save State
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============================= -->
+                    <!-- STEP 2: Add / Edit Activity -->
+                    <!-- ============================= -->
+                    <div class="wfs-step-card" data-model="StatusActivityMeta" id="StatusActivityCrudSection">
+                        <div class="wfs-step-header d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span class="wfs-step-number">2</span>
+                                <span class="wfs-step-title">Add / Edit Activity</span>
+                            </div>
+                            <div id="workQActivityMsg" class="mt-2 p-2"></div>
+                            <button type="button" class="btn btn-primary btn-xs m-0" data-ev="Ev_AddStatusActivity">
+                                <i class="fa fa-plus"></i> Add Activity
+                            </button>
+                        </div>
+                        <div class="wfs-step-body">
+                            <input type="hidden" data-model-prop="StatusActivityID" id="hdnStatusActivityID" />
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">
+                                            Activity Description <span class="text-danger">*</span>
+                                        </label>
+                                        <textarea class="form-control form-control-sm"
+                                                  data-model-prop="Description"
+                                                  id="txtStatusActivityDescription"
+                                                  rows="2"
+                                                  placeholder="Describe the workflow activity"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Rank</label>
+                                        <input type="number"
+                                               class="form-control form-control-sm"
+                                               data-model-prop="ActivityRank"
+                                               id="inpActivityRank"
+                                               min="1"
+                                               placeholder="Enter Rank" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3 mx-3">
+                                        <label class="form-label">&nbsp;</label>
+                                        <div class="form-check mt-2">
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   data-model-prop="IsRequired"
+                                                   id="chkIsRequired" />
+                                            <label class=" " for="chkIsRequired">Required</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wfs-step-actions">
+                                <button class="btn btn-primary btn-sm" data-ev="EV_SaveStatusActivity">
+                                    <i class="fa fa-save"></i> Save Activity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============================= -->
+                    <!-- STEP 3: Configure Activities -->
+                    <!-- ============================= -->
+                    <div class="wfs-step-card">
+                        <div class="wfs-step-header">
+                            <span class="wfs-step-number">3</span>
+                            <span class="wfs-step-title">Configure Activities</span>
+                        </div>
+                        <div class="wfs-step-body p-0">
+                            <table class="table table-bordered table-sm mb-0" id="activityListTable">
+
+                                <tbody id="wfActivityContainer">
+                                    <!-- Activities will be populated here -->
+                                </tbody>
+                            </table>
+
+                            <!-- No Activities Message -->
+                            <div class="wfs-empty-state " id="noActivityMsg">
+                                <i class="fa fa-tasks"></i>
+                                <p>No activities configured yet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Del Confirmation-->
+                    <div id="inlinealertMessageDivFilterGroup" class="mt-3 mb-2"></div>
+
+                </div>
+
+                <!-- ============================= -->
+                <!-- Activity Row Template -->
+                <!-- ============================= -->
+                <template id="activityRowTemplate">
+                    <tr data-model="ActivityRowMeta">
+                        <input type="hidden" data-model-prop="StatusActivityID" />
+                        <td class="text-center align-middle" data-model-prop="RowNumber"></td>
+                        <td class="align-middle" data-model-prop="Description"></td>
+                        <td class="text-center align-middle" data-model-prop="ActivityRank"></td>
+                        <td class="text-center align-middle">
+                            <span class="wfs-badge" data-model-prop="IsRequiredBadge"></span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <button class="btn btn-outline-primary btn-xs" data-ev="EV_EditActivity" title="Edit">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-xs" data-ev="EV_DeleteActivity" title="Delete">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </template>
+
+
+
+                <!-- ============================= -->
+                <!-- WorkQueue Main Section -->
+                <!-- ============================= -->
+                <div class="wokQ-wrapper custom-margin-dictionary mt-3 d-none" data-model="WorkQueueMeta" id="WorkQueueMainSection">
+                    <div class="card wokQ-card mb-3" id="WorkQueueCard">
+
+                        <!-- ========================= -->
+                        <!-- Card Header -->
+                        <!-- ========================= -->
+                        <div class="card-header d-flex justify-content-between align-items-center wokQ-card-header">
+
+                            <div class="w-auto px-0 wokQ-legend">
+                                WorkQueue
+                            </div>
+
+                            <!-- Vertical Ellipsis -->
+                            <div class="dropdown">
+                                <button class="btn btn-link p-0 wokQ-ellipsis-btn"
+                                        type="button"
+                                        id="workQueueMenuBtn"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-right wokQ-dropdown"
+                                     aria-labelledby="workQueueMenuBtn">
+
+                                    <span class="dropdown-item"
+                                          data-ev="EV_AddWorkQueue">
+                                        <i class="fa fa-plus mx-2"></i>
+                                        Add New Work Queue
+                                    </span>
+
+                                    <span class="dropdown-item"
+                                          data-ev="EV_EditWorkQueue">
+                                        <i class="fa fa-edit mx-2"></i>
+                                        Edit Work Queue
+                                    </span>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="wokQ-card-body" id="WorkQorderActiviy">
+
+                            <!-- Order Grid -->
+                            <div class="table-bordered cursor-pointer mb-2"
+                                 id="OrdersGrid">
+                            </div>
+                            <!--WorkFLow Section Start-->
+                            <!-- ============================= -->
+                            <!-- Workflow Section Container -->
+                            <!-- ============================= -->
+                            <div class="wfs-container mt-4 d-none" id="WorkFlowSection">
+
+                                <!-- ============================= -->
+                                <!-- Nav Tabs -->
+                                <!-- ============================= -->
+                                <ul class="nav nav-tabs wfs-nav-tabs" id="workflowTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active"
+                                                id="workflowTab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#workflowPanel"
+                                                type="button"
+                                                role="tab">
+                                            <i class="fa fa-project-diagram"></i> Workflow
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link"
+                                                id="workflowOrderSummary"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#workflowOrderSummaryPanel"
+                                                type="button"
+                                                role="tab">
+                                            <i class="fa fa-clipboard-list"></i> Order Summary
+                                        </button>
+                                    </li>
+                                    <!-- More tabs can be added here -->
+                                </ul>
+
+                                <!-- ============================= -->
+                                <!-- Tab Content -->
+                                <!-- ============================= -->
+                                <div class="tab-content wfs-tab-content" id="workflowTabContent">
+
+                                    <!-- ============================= -->
+                                    <!-- Workflow Tab Panel -->
+                                    <!-- ============================= -->
+                                    <div class="tab-pane fade show active"
+                                         id="workflowPanel"
+                                         role="tabpanel">
+
+                                        <!-- ============================= -->
+                                        <!-- SECTION 1: Workflow State -->
+                                        <!-- ============================= -->
+                                        <div class="wfs-card" data-model="WorkFlowStateMeta">
+                                            <div class="wfs-card-header">
+                                                <div>
+                                                    <h6 class="wfs-card-title"><i class="fa fa-cog"></i> Workflow State</h6>
+                                                    <small class="wfs-card-subtitle">Manage order workflow status</small>
+                                                </div>
+                                                <div id="errorMsgOrderWorkFlowState">
+
+                                                </div>
+                                                <button class="btn btn-primary btn-sm" data-ev="EV_SaveOrderWorkflowState">
+                                                    <i class="fa fa-save" data-ev="EV_SaveOrderWorkflowState"></i> Save
+                                                </button>
+                                            </div>
+                                            <div class="wfs-card-body">
+                                                <div class="row">
+                                                    <input class="d-none" id="OrderWorkFlowID" disabled/>
+                                                    <!-- Order Number -->
+                                                    <div class="col-md-5 mb-3">
+                                                        <label class="form-label">Order Number <span class="text-danger">*</span></label>
+                                                        <input type="text"
+                                                               class="form-control form-control-sm"
+                                                               data-model-prop="OrderNumber" id="workFlowOrderNumber"
+                                                               readonly disabled />
+                                                    </div>
+                                                    <!-- Current State Dropdown -->
+                                                    <div class="col-md-5 mb-3">
+                                                        <label class="form-label">Current State <span class="text-danger">*</span></label>
+                                                        <select class="form-control form-control-sm"
+                                                                data-model-prop="WorkflowStateID"
+                                                                id="drpDwnWorkflowStateID" data-ev="Ev_LoadOrderStatusActivityList">
+
+                                                            <option value="" disabled selected>- Select Workflow State -</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- Navigation Button -->
+                                                    <div class="col-md-2 mt-3">
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" data-ev="EV_NavigateOrder" title="View Order">
+                                                            <i class="fa fa-location-arrow me-1" aria-hidden="true" data-ev="EV_NavigateOrder"></i>
+                                                            View Order
+                                                        </button>
+
+
+                                                    </div>
+                                                </div>
+                                                <!-- Alert Message -->
+                                                <div class="alert alert-danger d-none" id="workflowStateAlert"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- ============================= -->
+                                        <!-- SECTION 2: Activities -->
+                                        <!-- ============================= -->
+                                        <div class="wfs-card" data-model="WorkFlowActivityMeta">
+                                            <div class="wfs-card-header d-flex justify-content-between">
+                                                <div>
+                                                    <h6 class="wfs-card-title"><i class="fa fa-tasks"></i> Activities</h6>
+                                                    <small class="wfs-card-subtitle">Activities for selected workflow state</small>
+                                                </div>
+                                                <div id="errorMsgWorkFlowOrderAct">
+
+                                                </div>
+                                            </div>
+                                            <div class="wfs-card-body p-0">
+                                                <!-- Activity Table -->
+                                                <table class="table table-bordered table-sm wfs-table" id="activityTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="40" class="text-center"><i class="fa fa-check"></i></th>
+                                                            <th>Description</th>
+                                                            <th width="140">Status</th>
+                                                            <th width="80" class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="activityContainer">
+                                                        <!-- Activities will be populated here -->
+                                                    </tbody>
+                                                </table>
+
+                                                <!-- No Activities Message -->
+                                                <div class="text-center text-muted py-3" id="noActivitiesMsg">
+                                                    <i class="fa fa-info-circle"></i> No activities found for selected state.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- End Workflow Tab Panel -->
+
+                                </div>
+
+                                <div class="tab-content wfs-tab-content" id="workflowOrderSummaryTabContent">
+                                    <div class="tab-pane fade show"
+                                         id="workflowOrderSummaryPanel"
+                                         role="tabpanel">
+                                        <!-- ORDER PREVIEW -->
+                                        <div class="ordPrv p-3" id="orderPreview">
+                                            <header class="ordPrv-header d-flex justify-content-between">
+                                                
+                                                <div class="ordPrv-topMeta " >
+                                                    <div><span class="ordPrv-k">Order Number:</span> <span class="ordPrv-v" id="OrderNumber">--</span></div>
+                                                    <div><span class="ordPrv-k">Date:</span> <span class="ordPrv-v" id="OrderDate">--</span></div>
+                                                </div>
+ 
+ 
+                                                    <button type="button" class="btn btn-outline-primary btn-sm m-0" data-ev="EV_NavigateOrder" title="View Order">
+                                                        <i class="fa fa-location-arrow me-1" aria-hidden="true" data-ev="EV_NavigateOrder"></i>
+                                                        View Order
+                                                    </button>
+ 
+ 
+                                            </header>
+
+                                            <hr class="ordPrv-rule" />
+
+                                            <!-- PATIENT -->
+                                            <section class="ordPrv-section">
+                                                <div class="ordPrv-line ordPrv-grid3">
+                                                    <div class="ordPrv-k">Patient:</div>
+                                                    <div class="ordPrv-v" id="PatientName">--</div>
+
+                                                    <div class="ordPrv-k">DOB:</div>
+                                                    <div class="ordPrv-v" id="DOB">--</div>
+
+                                                    <div class="ordPrv-k">MRN:</div>
+                                                    <div class="ordPrv-v" id="MRN">--</div>
+                                                </div>
+                                            </section>
+
+                                            <hr class="ordPrv-rule" />
+
+                                            <!-- PROVIDER -->
+                                            <section class="ordPrv-section">
+                                                <div class="ordPrv-line ordPrv-grid3">
+                                                    <div class="ordPrv-k">Ordering Provider:</div>
+                                                    <div class="ordPrv-v" id="ProviderName">--</div>
+
+                                                    <div class="ordPrv-k">NPI:</div>
+                                                    <div class="ordPrv-v" id="NPI">--</div>
+                                                </div>
+                                            </section>
+
+                                            <hr class="ordPrv-rule" />
+                                            <!-- ORDER SUMMARY -->
+                                            <section class="ordPrv-section">
+                                                <h2 class="ordPrv-h2">Order Summary</h2>
+                                                <!-- Host to render into -->
+                                                <div id="orderItemsHost"></div>
+                                            </section>
+
+                                            <hr class="ordPrv-rule" />
+
+                                            <!-- SCHEDULING -->
+                                            <!-- Right side: Service Location   -->
+                                            <section class="ordPrv-section">
+                                                <div class="ordPrv-line ordPrv-grid2">
+                                                    <div class="ordPrv-k">Service Location:</div>
+                                                    <div class="ordPrv-v" id="Location">--</div>
+                                                </div>
+                                            </section>
+
+                                            <!-- Right side: Documents  -->
+                                            <section class="ordPrv-section" id="ordPrv-docs-section">
+                                                <div class="ordPrv-line ordPrv-grid2">
+                                                    <div class="ordPrv-k">Documents:</div>
+                                                    <div class="ordPrv-v">
+                                                        <ul id="orderDocsHost" class="ordPrv-docs list-unstyled mb-0"></ul>
+                                                        <div id="orderDocsEmpty" class="text-muted small">No documents uploaded.</div>
+                                                    </div>
+                                                </div>
+                                            </section>
+
+                                            <hr class="ordPrv-rule" />
+
+                                            <!-- FOOTER -->
+                                            <footer class="ordPrv-footer">
+                                                <div class="ordPrv-grid2 d-flex justify-content-between align-items-start flex-wrap">
+
+                                                    <!-- Left Section : Submitted info -->
+                                                    <div>
+                                                        <div class="d-flex mb-2">
+                                                            <div class="ordPrv-k">Submitted by:</div>
+                                                            <div class="ordPrv-v mx-2" id="SubmittedBy">--</div>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <div class="ordPrv-k">Date/Time:</div>
+                                                            <div class="ordPrv-v mx-2" id="OrderDate_submit">--</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Right Section : Recurring Details -->
+                                                    <div class="ms-auto   d-none" id="headerReccuring">
+                                                        <div class="ordPrv-k fw-bold mb-1">Recurring Details</div>
+                                                        <div class="d-flex mb-2">
+                                                            <div class="ordPrv-k">Is Recurring:</div>
+                                                            <div class="ordPrv-v mx-2" id="IsRecurring">--</div>
+                                                        </div>
+                                                        <div class="d-flex mb-2">
+                                                            <div class="ordPrv-k">Frequency:</div>
+                                                            <div class="ordPrv-v mx-2" id="RecurringFrequency">--</div>
+                                                        </div>
+                                                        <div class="d-flex mb-2">
+                                                            <div class="ordPrv-k">End Date:</div>
+                                                            <div class="ordPrv-v mx-2" id="RecurringEndDate">--</div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </footer>
+                                        </div>
+                                        <div class="cancel-info-msg d-none " id="CancelReaonInfo">
+                                            <div class="ordPrv-row">
+                                                <span class="ordPrv-k">Cancel Reason:</span>
+                                                <span class="ordPrv-v mx-2" id="valCancelReason"></span>
+                                            </div>
+
+                                            <div class="ordPrv-row">
+                                                <span class="ordPrv-k">Cancelled By:</span>
+                                                <span class="ordPrv-v mx-2" id="valCancelBy"></span>
+                                            </div>
+
+                                            <div class="ordPrv-row">
+                                                <span class="ordPrv-k">Cancel Date:</span>
+                                                <span class="ordPrv-v mx-2" id="valCancelDate"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Tab Content -->
+
+                            </div>
+
+                            <!-- ============================= -->
+                            <!-- Activity Row Template -->
+                            <!-- ============================= -->
+                            <template id="activityItemTemplate">
+                                <tr class="wfs-activity-row" data-model="ActivityItemMeta">
+                                    <input type="hidden" data-model-prop="StatusActivityID" />
+                                    <input type="hidden" data-model-prop="ActivityID" />
+
+                                    <!-- Checkbox -->
+                                    <td class="text-center align-middle">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               data-model-prop="IsCompleted"
+                                               data-ev="EV_ActivityCheckChanged" />
+                                    </td>
+
+                                    <!-- Description -->
+                                    <td class="align-middle">
+                                        <span class="wfs-activity-desc" data-model-prop="Description"></span>
+                                        <a href="javascript:void(0)" class="wfs-notes-toggle" data-ev="EV_ToggleNotes">
+                                            <i class="fa fa-comment"></i> Notes
+                                        </a>
+                                    </td>
+
+                                    <!-- Status Dropdown -->
+                                    <td class="align-middle">
+                                        <select class="form-control form-control-sm" data-model-prop="ActivityStatus" data-ev="EV_ActivityStatusChanged">
+                                            <option value="NS">Not Started</option>
+                                            <option value="IP">In Progress</option>
+                                            <option value="COMP">Completed</option>
+                                        </select>
+                                    </td>
+
+                                    <!-- Save Button -->
+                                    <td class="text-center align-middle">
+                                        <button class="btn btn-outline-primary btn-sm" data-ev="EV_SaveActivity" title="Save Activity">
+                                            <i class="fa fa-save" data-ev="EV_SaveActivity"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Notes Row (Hidden by default) -->
+                                <tr class="wfs-notes-row d-none" data-notes-row>
+                                    <td colspan="4" class="wfs-notes-cell">
+                                        <div class="wfs-notes-section">
+                                            <!-- Add Note Input -->
+                                            <div class="wfs-notes-input-wrapper">
+                                                <input type="text"
+                                                       class="form-control form-control-sm"
+                                                       data-model-prop="ActivityNote"
+                                                       placeholder="Add a note..." />
+                                                <i class="fa fa-plus btn btn-sm btn-primary m-0" data-ev="EV_SaveActivityNote" title="Add Notes"></i>
+    
+                                            </div>
+
+                                            <!-- Notes List -->
+                                            <div class="wfs-notes-list" data-container="ActivityNotes">
+                                                <!-- Notes will be populated here -->
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+
+                            <!-- ============================= -->
+                            <!-- Note Item Template -->
+                            <!-- ============================= -->
+                            <template id="noteItemTemplate">
+                                <div class="wfs-note-item">
+                                    <div class="wfs-note-meta">
+                                        <span class="wfs-note-author"><i class="fa fa-user"></i> <span data-model-prop="CreateBy"></span></span>
+                                        <span class="wfs-note-separator">|</span>
+                                        <span class="wfs-note-date"><i class="fa fa-calendar"></i> <span data-model-prop="CreateDate"></span></span>
+                                    </div>
+                                    <div class="wfs-note-text" data-model-prop="NoteText"></div>
+                                </div>
+                            </template>
+
+                            <!--WorkFLow Section End-->
+                        </div>
+                    </div>
+
+                    <fieldset class="border p-3 mb-3 wokQ-fieldset  " id="WorkQueueConfiguration">
+
+
+                        <!-- Header -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 wokQ-header">
+                            <h5 class="mb-0 font-weight-bold wokQ-title">
+                                WorkQueue Configuration
+                            </h5>
+                            <div id="workQErrorMessage"></div>
+                            <button type="button"
+                                    class="btn btn-outline-primary wokQ-add-btn btn-xs"
+                                    id="btnAddWorkQueue" data-ev="EV_AddWorkQueue">
+                                <i class="fa fa-plus" data-ev="EV_AddWorkQueue"></i> Add WorkQueue
+                            </button>
+
+
+                        </div>
+
+                        <!-- WorkQueue Fields -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <input type="text"
+                                       class="form-control form-control-sm d-none"
+                                       data-model-prop="WorkQueueID">
+
+                                <div class="form-group">
+                                    <label>WorkQueue Name<span class="text-danger">*</span></label>
+                                    <input type="text"
+                                           class="form-control form-control-sm"
+                                           data-model-prop="Name"
+                                           id="txtWorkQName"
+                                           placeholder="Enter WorkQueue name">
+                                </div>
+                            </div>
+                            <!-- Workflow Status Dropdown -->
+                            <!--<div class="col-md-6 ">
+                                <div class="form-group">
+                                    <label>WorkFlowStatus <span class="text-danger">*</span></label>
+                                    <select class="form-control " data-model-prop="WorkflowStateID" id="drpDwnWorkflowStateID">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                            </div>-->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Description <span class="text-danger">*</span></label>
+                                    <textarea type="text"
+                                              class="form-control form-control-sm"
+                                              data-model-prop="Description"
+                                              id="txtDescription"
+                                              rows="10"
+                                              style="resize:vertical;min-height:40px"
+                                              placeholder="Enter description"></textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <!-- ============================= -->
+                        <!-- Criteria Section -->
+                        <!-- ============================= -->
+                        <fieldset class="border p-3 wokQ-criteria-fieldset">
+                            <legend class="w-auto px-0 mb-0 wokQ-criteria-legend">
+                                Criteria<span class="text-danger">*</span>
+                            </legend>
+
+                            <p class="text-muted small mb-2 wokQ-helper-text">
+                                Select one or more criteria below and apply them to build WorkQueue criteria.
+                            </p>
+
+                            <div class="d-flex align-items-center mb-3 wokQ-filter-bar">
+                                <select id="ddlFilterType"
+                                        class="form-control form-control-sm wokQ-filter-select">
+                                    <option value="" selected>- Select Filter -</option>
+                                    <option value="clientName">Client Name</option>
+                                    <option value="cptCode">CPT Codes</option>
+                                    <option value="orderType">Order Type</option>
+                                    <option value="orderStatus">Order Status</option>
+                                    <option value="patientName">Patient Name</option>
+                                    <option value="priority">Priority</option>
+                                    <option value="serviceLocationName">Service Location Name</option>
+                                </select>
+
+                                <button id="btnAddFilter"
+                                        class="ml-2 btn btn-outline-primary btn-xs"
+                                        data-ev="EV_AddFilter">
+                                    <i class="fa fa-plus"></i> Add Filter
+                                </button>
+                            </div>
+
+                            <!-- Dynamic Filters -->
+                            <div id="filterContainer" class="wokQ-filter-container mb-3"></div>
+
+                            <!-- Actions -->
+                            <div class="d-flex justify-content-end wokQ-action-bar">
+
+
+                                <button id="btnReset"
+                                        class="ml-2 btn btn-outline-secondary btn-xs"
+                                        data-ev="EV_ResetValues">
+                                    <i class="fa fa-recycle"></i>  Reset
+                                </button>
+
+                                <button id="btnApply"
+                                        class="ml-2 btn btn-outline-primary btn-xs"
+                                        data-ev="EV_SaveWorkQueue">
+                                    <i class="fa fa-save"  data-ev="EV_SaveWorkQueue"></i>  Save
+                                </button>
+                            </div>
+                        </fieldset>
+
+
+
+                    </fieldset>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/js/core.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+
+    <script src="js/workQueue.js"></script>
+    <script>
+        function toggleAccordion(header) {
+
+            var targetId = header.getAttribute('data-target');
+            if (!targetId) return;
+
+            var body = document.getElementById(targetId);
+            if (!body) return;
+
+            var isActive = header.classList.contains('active');
+
+            document.querySelectorAll('.wfs-accordion-header').forEach(function (h) {
+                h.classList.remove('active');
+            });
+
+            document.querySelectorAll('.wfs-accordion-body').forEach(function (b) {
+                b.classList.remove('open');
+            });
+
+            if (!isActive) {
+                header.classList.add('active');
+                body.classList.add('open');
+            }
+        }
+
+        /* Active WorkQueue Item */
+        function setActiveWorkQueue(item) {
+            document.querySelectorAll('.wfs-workqueue-item').forEach(function (el) {
+                el.classList.remove('active');
+            });
+            item.classList.add('active');
+        }
+
+
+        
+
+    </script>
+</body>
+
+</html>

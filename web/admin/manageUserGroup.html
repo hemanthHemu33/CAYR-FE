@@ -1,0 +1,260 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR-Admin-Group & Role</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+     <script src="../common/modxCore/js/QCGrid.js"></script>
+
+   <link href="../common/modxCore/css/QCGrid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+
+    <!--Custom css-->>
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        .content-wrapper {
+            padding: 16px !important;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        body,
+        html {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding-right: 0 !important;
+        }
+
+        .navbar .navbar-menu-wrapper {
+        }
+
+        .btn-link-table {
+            font-weight: bold !important;
+            border: none !important;
+            color: dodgerblue !important;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--bs-nav-tabs-link-active-color);
+            background-color: var(--bs-nav-tabs-link-active-bg);
+            border-color: var(--bs-nav-tabs-link-active-border-color);
+            border-radius: 0;
+            border: 1px solid #dee2e6;
+            padding: 0.75rem 1.5rem;
+            font-size: 13px
+        }
+
+            .nav-tabs .nav-link.active,
+            .nav-tabs .nav-item.show .nav-link {
+                color: var(--text-color);
+                background-color: var(--accent-color);
+                border-color: transparent transparent #f3f3f3;
+                border-bottom: 3px solid !important;
+                font-size: 13px;
+                font-weight: bold;
+            }
+
+            .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+                border-color: #e9ecef #e9ecef #dee2e6;
+            }
+
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+        }
+        /* Footer will stay at the bottom */
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" id="divMain">
+        <!--Top menu start-->
+        <div id="includeTopMenu">
+        </div>
+        <!--Top menu end-->
+
+        <div class="container-fluid page-body-wrapper ">
+            <!-- side bar -->
+            <div id="includeLeftMenu"></div>
+            <!-- side bar -->
+            <!--  Main wrapper -->
+            <div class="main-panel">
+                <div class="theme-setting-wrapper">
+                    <div id="theme-settings" class="settings-panel" style="top: 55px !important">
+                        <div class="settings-heading" style="border-bottom: 1px solid #dee2e6;">
+                            Admin
+                            <i class="settings-close fas fa-times" data-ev="EV_CloseSubMenu"></i>
+                            <i class="fas fa-ellipsis-v menu-icon mx-4 settings-close d-none" id="dictEllipsisDropdown" data-bs-toggle="dropdown" aria-expanded="true" data-ev="EV_Show_EllipsisMenu"></i>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" id="dictEllipsisMenu" aria-labelledby="dictEllipsisDropdown">
+                            </div>
+                        </div>
+                        <ul class="list-unstyled" id="subMenuList" style="cursor:pointer">
+                            <li class="m-2 custom-dist-codes" value="Manage User Group" data-ev="EV_ManageUserGroup" style="background-color: lightgray; display: none;" id="lm_ManageGroupRole" >Manage Group & Role</li>
+                            <li class="m-2 custom-dist-codes" value="Manage User" data-ev="EV_ManageUser" id="lm_ManageUser" style="display: none">Manage User</li>
+    
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-wrapper" style="overflow-y: auto; height: 200px">
+                    <div class="d-flex custom-margin-dictionary mb-2" id="filterMangeGroup">
+                        <div class="dropdown-group mx-2">
+                            <label for="selClient">Select Client</label>
+                            <select class="form-control selClient" data-ev="EV_Client_Change" id="selClient" fdprocessedid="8bmbfu"></select>
+                        </div>
+                        <div class="dropdown-group mx-2 filters" style="display: none;">
+                            <label class="selActive">Show User</label>
+                            <select class="form-select form-select-sm selActive" id="selActive" data-ev="EV_Active">
+                                <option value="-1">All</option>
+                                <option value="1">Active</option>
+                                <option value="0">InActive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="separator"></div>
+
+                    <div class="row mb-2 groupnrole" >
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <nav>
+                                <div class="container-fluid custom-margin-dictionary" id="divUserGroup" role="tablist" style="display: none;">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                                        <div class="nav nav-tabs menuDiv flex-nowrap">
+                                            <a class="nav-item nav-link active" id="nav-group-tab" data-toggle="tab" href="#nav-Group1" role="tab" aria-controls="nav-Group1" aria-selected="true" data-ev="Ev_Show_Group">
+                                                <i class="fa fa-users mr-1" data-ev="Ev_show_Filter"></i> Manage Group
+                                            </a>
+                                            <a class="nav-item nav-link" id="nav-role-tab" data-toggle="tab" href="#nav-Role1" role="tab" aria-controls="nav-Role1" aria-selected="false" data-ev="Ev_Show_Role">
+                                                <i class="fa fa-user-tag mr-1" data-ev="Ev_hide_Filter"></i> Manage Role
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+
+                            <div class="tab-pane fade active show" id="nav-Group" role="tabpanel" aria-labelledby="nav-group-tab1">
+                                <div class="row d-flex menuDiv" id="divUserGroup">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="table-bordered cursor-pointer mb-3 custom-margin-dictionary" id="UserGroupGrid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="nav-Role" role="tabpanel" aria-labelledby="nav-role-tab1">
+                                <div class="row d-flex menuDiv" id="divUserRole">
+                                    <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="table-bordered cursor-pointer mb-3 custom-margin-dictionary" id="UserRoleGrid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 inpForm" style="display: none;">
+                            <div class="row">
+                                <div class="col-3 mt-0">
+                                    <div class="d-flex justify-content-between align-items-center pb-1 mb-0">
+                                        <button class="custom-add-btn btn-primary" id="addGroup" data-ev="EV_AddGroup" title="Add group">
+                                            <i data-ev="EV_AddGroup" class="fa fa-plus mr-1"></i> Add Group
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="error-message mx-1 mt-3" id="divValidateMsgGroup"></div>
+                                </div>
+
+                                <div class="col-5 mt-2">
+                                    <button id="btnDeleteGroup" type="button" class="custom-del-btn float-end" data-ev="EV_DeleteGroup">
+                                        <i class="fa fa-trash" aria-hidden="true" data-ev="EV_DeleteGroup"></i> Delete
+                                    </button>
+                                    <button class="custom-add-btn btn-primary float-end" data-ev="EV_SaveGroup">
+                                        <i class="fas fa-save mr-1" data-ev="EV_SaveGroup"></i> Save Group
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="inlinealertMessageGroup" class="mt-1"></div>
+                            <div class="row">
+                                <div class="col-12 mt-0">
+                                    <div id="divAddEditUserGroupForm" class="forms11">
+                                        <fieldset class="facility-fieldset border p-2 rounded mb-3">
+                                            <legend class="float-none w-auto px-2">User Group Info</legend>
+                                            <div id="divAddEditGroup" data-model="UserGroupMeta">
+                                                <input id="UserGroupID" type="text" class="form-control input-sm" data-model-prop="ID" style="display: none;">
+                                                <div class="row mb-2">
+                                                    <div class="col-5 d-flex align-items-center">
+                                                        <label for="inpGroupName" class="float-none w-auto">Name<span class="text-danger">*</span></label>
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <input type="text" maxlength="50" class="form-control input-sm mt-1" autocomplete="off" data-model-prop="GroupName" id="inpGroupName">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-5 d-flex align-items-center">
+                                                        <label for="inpDescription" class="float-none w-auto">Description</label>
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <textarea id="inpDescription" class="width100 form-control input-sm" style="height: 80px;" maxlength="100" data-model-prop="Description"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-5 d-flex align-items-center">
+                                                        <label for="inpActive" class="float-none w-auto">Active</label>
+                                                    </div>
+                                                    <div class="col-1">
+                                                        <input class="form-control input-sm mt-1" type="checkbox" value="" data-model-prop="Active" d="inpActive" checked>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset class="facility-fieldset border p-2 rounded mb-1">
+                                            <legend class="float-none w-auto px-2">Role Mapping</legend>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <ul class="list-group-flush adminRoleUl" id="ulGroupRoleMapping"></ul>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../common/js/core.js"></script>
+    <script src="../common/js/loadHtmlCtl.js"></script>
+    <script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../common/theme/assets/js/theme.js"></script>
+    <script src="../common/theme/assets/js/template.js"></script>
+    <script src="../common/js/jquery-3.6.0.min.js"></script>
+    <!--jQuery UI-->
+    <script src="../common/js/jquery-ui.min.js"></script>
+    <script src="../common/js/selectize.min.js"></script>
+    <script src="../common/js/bootstrap-datepicker.min.js"></script>
+    <script src="js/manageUserGroup.js"></script>
+</body>
+</html>

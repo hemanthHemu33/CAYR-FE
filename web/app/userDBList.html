@@ -1,0 +1,83 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CAYR-user DB List</title>
+    <script src="../common/modxCore/js/jquery-3.6.0.min.js"></script>>
+    <script src="../common/modxCore/js/bootstrap.bundle.min.js"></script>
+      <script src="../common/modxCore/js/bootstrap.min.js"></script>
+       <script src="../common/modxCore/js/AppAsyncCallBack.js"></script>
+   <script src="../common/modxCore/js/modxAppCore.js"></script>
+    
+    <link rel="stylesheet" href="../common/theme/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="../common/theme/assets/css/theme.css" />
+       <link href="../common/modxCore/fontawesome-free-6.7.2/css/all.min.css" rel="stylesheet" />
+
+    <!--Custom css-->>
+    <link href="../app/css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/css/CustomTheme.css" />
+
+    <style>
+        .content-wrapper {
+            padding: 16px !important;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .navbar .navbar-menu-wrapper {
+        }
+
+        .btn-link-table {
+            font-weight: bold !important;
+            border: none !important;
+            color: dodgerblue !important;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<body class="theme-mountain">
+    <div class="container-scroller" style="margin-top: -18px !important;">
+        <div id="includeTopMenu">
+        </div>
+        <div class="container-fluid full-page-wrapper" >
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 mx-auto" id="divMain">
+                        <div class="auth-form-light text-left py-5 px-4 px-sm-5 shadow rounded-2" data-model="meta">
+                            <h5>CAYR</h5>
+                            <h6 class="fw-light">Please select a Database to connect.</h6>
+                            <div class="form-group">
+                                <select id="userDbList" style="width: 100%; overflow: auto; color: black;" size="10">
+                                </select>
+                            </div>
+                            <div class="mt-2 mb-3 d-flex gap-2">
+                                <a href="./index.html" class="btn btn-primary btn-sm w-50 py-2 fs-6 rounded-2" data-ev="EV_CONNECT">CONNECT</a>
+                                <a href="./dashboard.html" class="btn btn-secondary btn-sm w-50 py-2 fs-6 rounded-2" data-ev="EV_CANCEL">CANCEL</a>
+                            </div>
+                            <h5 id="error" style="color: red;">&nbsp;</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+
+    <!--<script src="../common/js/core.js"></script>-->
+    <!--<script src="../common/theme/assets/libs/jquery/dist/jquery.min.js"></script>-->
+    <!--<script src="../common/theme/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
+    <!--<script src="../common/theme/assets/js/theme.js"></script>-->
+    <!--<script src="../common/theme/assets/js/template.js"></script>-->
+    <script src="js/userDBList.js"></script>
+</body>
+
+</html>
