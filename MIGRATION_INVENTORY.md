@@ -15,3 +15,8 @@ Legacy FE root path: old-project/web
 - old-project/web/app/service.html
 - old-project/web/app/userDBList.html
 - old-project/web/app/workQueue.html
+
+## ADMIN PAGES
+- old-project/web/admin/admin.html
+- old-project/web/admin/manageUser.html
+- old-project/web/admin/manageUserGroup.html
