@@ -38,6 +38,9 @@ Legacy FE root path: old-project/web
   - `old-project/web/app/js/workQueue.js`
 
 ## ADMIN PAGES
-- old-project/web/admin/admin.html
-- old-project/web/admin/manageUser.html
-- old-project/web/admin/manageUserGroup.html
+- `old-project/web/admin/admin.html`
+  - `old-project/web/admin/js/admin.js`
+- `old-project/web/admin/manageUser.html`
+  - `old-project/web/admin/js/manageUser.js`
+- `old-project/web/admin/manageUserGroup.html`
+  - `old-project/web/admin/js/manageUserGroup.js`
