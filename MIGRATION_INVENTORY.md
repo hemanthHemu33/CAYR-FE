@@ -51,3 +51,15 @@ Discovered under `old-project/web/common/layouts/`:
 - `old-project/web/common/layouts/leftMenu.html`
 - `old-project/web/common/layouts/sideMenu.html`
 - `old-project/web/common/layouts/topMenu.html`
+
+## CSS FILES
+Unique CSS paths referenced by representative legacy pages (`login.html`, `dashboard.html`, `workQueue.html`, `admin.html`):
+- `../app/css/app.css`
+- `../app/css/selectize.css`
+- `../common/css/CustomTheme.css`
+- `../common/css/daterangepicker.css`
+- `../common/modxCore/css/QCGrid.css`
+- `../common/modxCore/fontawesome-free-6.7.2/css/all.min.css`
+- `../common/theme/assets/css/styles.min.css`
+- `../common/theme/assets/css/theme.css`
+- `css/app.css`
