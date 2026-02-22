@@ -44,3 +44,9 @@ Legacy FE root path: old-project/web
   - `old-project/web/admin/js/manageUser.js`
 - `old-project/web/admin/manageUserGroup.html`
   - `old-project/web/admin/js/manageUserGroup.js`
+
+## LAYOUT FRAGMENTS
+- `old-project/web/common/layouts/adminSubMenu.html`
+- `old-project/web/common/layouts/leftMenu.html`
+- `old-project/web/common/layouts/sideMenu.html`
+- `old-project/web/common/layouts/topMenu.html`
