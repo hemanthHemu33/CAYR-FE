@@ -1,70 +1,53 @@
-﻿"use strict"
+"use strict";
 
-var _Global = {
-    url: '../../../apix/Login/',
-}
+(function bootstrapLoginReact() {
+  var LOGIN_CONTAINER_ID = 'divMain';
+  var REACT_MOUNT_ID = 'login-react-root';
 
-var Login = {
+  function mountLoginPlaceholder() {
+    var container = document.getElementById(LOGIN_CONTAINER_ID);
+    if (!container) {
+      return;
+    }
 
-    Init: function () {
-        document.getElementById('divMain').addEventListener('click', this);
-    },
+    var mountNode = document.getElementById(REACT_MOUNT_ID);
+    if (!mountNode) {
+      mountNode = document.createElement('div');
+      mountNode.id = REACT_MOUNT_ID;
+      mountNode.setAttribute('aria-hidden', 'true');
+      container.appendChild(mountNode);
+    }
 
-    UserLogin: function () {
-       
-        var userMeta = _$modxAppCore.getAppCoreModel('userMeta');
-        if (userMeta.UserName.trim() == '') {
-            $('#error').html('Please enter Username');
-            return;
-        }
+    var LoginPlaceholder = function LoginPlaceholder() {
+      return null;
+    };
 
-        if (userMeta.Password == '') {
-            $('#error').html('Please enter Password');
-            return;
-        }
+    var reactElement = window.React.createElement(LoginPlaceholder);
+    window.ReactDOM.createRoot(mountNode).render(reactElement);
+  }
 
-        $('#error').html('');
-        _$modxAppProgressBar.show();
-        var functionName = "UserLogin";
-        var postbackUrl = _Global.url + '/' + functionName;
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var script = document.createElement('script');
+      script.src = src;
+      script.onload = resolve;
+      script.onerror = function () {
+        reject(new Error('Failed to load script: ' + src));
+      };
+      document.head.appendChild(script);
+    });
+  }
 
-        __DoAsyncPostBack(userMeta, postbackUrl, function (ajxOut) {
-            if (ajxOut.Success == false) {
-                _$modxAppProgressBar.hide();
-                $('#error').html(ajxOut.Message);
-                return;
-            }
+  function ensureReactGlobals() {
+    if (window.React && window.ReactDOM && window.ReactDOM.createRoot) {
+      return Promise.resolve();
+    }
 
-            if (ajxOut.Success == true) {
-                if (ajxOut.Command == "ShowDBList") {
-                    location.href = "userDBList.html";
-                }
-                else {
-                    location.href = "dashboard.html";
-                    _$modxAppProgressBar.hide();
-                }
-            }
-            _$modxAppProgressBar.hide();
-        });
-    },
+    return loadScript('https://unpkg.com/react@19/umd/react.production.min.js')
+      .then(function () {
+        return loadScript('https://unpkg.com/react-dom@19/umd/react-dom.production.min.js');
+      });
+  }
 
-    handleEvent: function (ev) {
-        ev.preventDefault();
-        var target = ev.target;
-        var currentTarget = ev.currentTarget;
-        var evlCase = currentTarget.getAttribute('data-evl');
-        var evCase = target.getAttribute('data-ev');
-
-        switch (evCase) {
-            case 'EV_LOGIN':
-                this.UserLogin();
-                break;
-        }
-    },
-}
-
-Login.Init();
-
-//if (window.location.protocol != "https:") {
-//    window.location.protocol = "https";
-//}
+  ensureReactGlobals().then(mountLoginPlaceholder);
+})();
