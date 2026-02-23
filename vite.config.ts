@@ -13,9 +13,20 @@ const collectHtmlInputs = (dir: string) =>
       return inputs;
     }, {});
 
-const htmlInputs = {
+const collectJsInputs = (dir: string) =>
+  readdirSync(resolve(__dirname, dir))
+    .filter((file) => file.endsWith(".js"))
+    .reduce<Record<string, string>>((inputs, file) => {
+      const name = `${dir}/${file.replace(/\.js$/, "")}`;
+      inputs[name] = resolve(__dirname, dir, file);
+      return inputs;
+    }, {});
+
+const buildInputs = {
   ...collectHtmlInputs("web/app"),
   ...collectHtmlInputs("web/admin"),
+  ...collectJsInputs("web/app/js"),
+  ...collectJsInputs("web/admin/js"),
 };
 
 // https://vite.dev/config/
@@ -34,9 +45,9 @@ export default defineConfig({
   build: {
     cssCodeSplit: false,
     rollupOptions: {
-      input: htmlInputs,
+      input: buildInputs,
       output: {
-        entryFileNames: "assets/[name].js",
+        entryFileNames: "[name].js",
         chunkFileNames: "assets/[name].js",
         assetFileNames: "assets/[name][extname]",
         manualChunks: () => undefined,
