@@ -7,5 +7,11 @@ export default defineConfig({
   server: {
     port: 4000,
     strictPort: true, // fails instead of switching to another port
+    proxy: {
+      "/apix": {
+        target: process.env.VITE_BACKEND_ORIGIN,
+        changeOrigin: true,
+      },
+    },
   },
 });
