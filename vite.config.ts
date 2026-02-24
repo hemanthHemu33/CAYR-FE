@@ -51,9 +51,10 @@ export default defineConfig(({ mode }) => {
         input: buildInputs,
         output: {
           entryFileNames: "[name].js",
-          chunkFileNames: "assets/[name].js",
+          chunkFileNames: "[name].js",
           assetFileNames: "assets/[name][extname]",
-          manualChunks: () => undefined,
+          // Keep bundles page-local and deterministic for the migration phase.
+          manualChunks: undefined,
         },
       },
     },
