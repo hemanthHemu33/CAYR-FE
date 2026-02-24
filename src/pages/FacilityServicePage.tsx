@@ -1,5 +1,7 @@
-const FacilityServicePage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default FacilityServicePage;
+const FacilityServicePage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default FacilityServicePage

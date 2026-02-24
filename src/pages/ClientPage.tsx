@@ -1,5 +1,7 @@
-const ClientPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default ClientPage;
+const ClientPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default ClientPage

@@ -1,5 +1,7 @@
-const DashboardPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default DashboardPage;
+const DashboardPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default DashboardPage

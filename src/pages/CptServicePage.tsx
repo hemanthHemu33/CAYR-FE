@@ -1,5 +1,7 @@
-const CptServicePage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default CptServicePage;
+const CptServicePage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default CptServicePage

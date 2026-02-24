@@ -1,5 +1,7 @@
-const OrdersPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default OrdersPage;
+const OrdersPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default OrdersPage

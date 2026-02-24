@@ -1,5 +1,7 @@
-const WorkQueuePage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default WorkQueuePage;
+const WorkQueuePage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default WorkQueuePage

@@ -1,5 +1,7 @@
-const ManageFacilitesPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default ManageFacilitesPage;
+const ManageFacilitesPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default ManageFacilitesPage

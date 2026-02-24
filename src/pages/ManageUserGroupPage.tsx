@@ -1,5 +1,7 @@
-const ManageUserGroupPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default ManageUserGroupPage;
+const ManageUserGroupPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default ManageUserGroupPage

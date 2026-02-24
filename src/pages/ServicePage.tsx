@@ -1,5 +1,7 @@
-const ServicePage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default ServicePage;
+const ServicePage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default ServicePage

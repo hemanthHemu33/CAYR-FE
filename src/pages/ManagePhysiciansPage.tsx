@@ -1,5 +1,7 @@
-const ManagePhysiciansPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default ManagePhysiciansPage;
+const ManagePhysiciansPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default ManagePhysiciansPage

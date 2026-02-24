@@ -1,5 +1,7 @@
-const AdminPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default AdminPage;
+const AdminPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default AdminPage
