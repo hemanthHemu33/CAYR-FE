@@ -1,4 +1,138 @@
 var _GlobalRoles = {}
+
+(function (global) {
+    function __extractRedirectPayload(responseData) {
+        if (!responseData || typeof responseData !== 'object') {
+            return null;
+        }
+
+        return responseData.payload || responseData.redirectUrl || responseData.url || null;
+    }
+
+    async function __postJsonWithCredentials(meta, url) {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(meta || {})
+        });
+
+        const contentType = response.headers.get('content-type') || '';
+        let data = null;
+
+        if (contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            const text = await response.text();
+            if (text) {
+                try {
+                    data = JSON.parse(text);
+                } catch (_) {
+                    data = text;
+                }
+            }
+        }
+
+        if (response.status === 401 || response.status === 403) {
+            const redirectUrl = __extractRedirectPayload(data);
+            if (redirectUrl) {
+                window.location.assign(redirectUrl);
+            }
+        }
+
+        if (!response.ok) {
+            const error = new Error('Request failed with status ' + response.status);
+            error.status = response.status;
+            error.responseData = data;
+            throw error;
+        }
+
+        return data && data.d != null ? data.d : data;
+    }
+
+    if (typeof global.showAsyncProgress !== 'function') {
+        global.showAsyncProgress = function () {
+            $('#AsyncRequestProgress').show();
+        };
+    }
+
+    if (typeof global.hideAsyncProgress !== 'function') {
+        global.hideAsyncProgress = function () {
+            $('#AsyncRequestProgress').hide();
+        };
+    }
+
+    if (typeof global.asyncPostbackError !== 'function') {
+        global.asyncPostbackError = function (xhr, errStatus, errMessage) {
+            if (xhr && (xhr.status === 401 || xhr.status === 403)) {
+                const redirectUrl = __extractRedirectPayload(xhr.responseJSON);
+                if (redirectUrl) {
+                    window.location.assign(redirectUrl);
+                }
+            }
+
+            console.log('errStatus :' + errStatus + ':' + (xhr ? xhr.responseText : errMessage));
+        };
+    }
+
+    if (typeof global.AjaxInput !== 'function') {
+        global.AjaxInput = function () {
+            return { command: '', sender: '', message: '', InputData: {}, KeyValueData: [] };
+        };
+    }
+
+    if (typeof global.AjaxOutput !== 'function') {
+        global.AjaxOutput = function () {
+            return { command: '', commandArgs: [], message: '', resultData: [], sender: '', success: '' };
+        };
+    }
+
+    if (typeof global.__PromisAsyncPostBack !== 'function') {
+        global.__PromisAsyncPostBack = async function (meta, url) {
+            showAsyncProgress();
+            try {
+                return await __postJsonWithCredentials(meta, url);
+            } catch (error) {
+                asyncPostbackError(error, 'error', error.message);
+                throw error;
+            } finally {
+                hideAsyncProgress();
+            }
+        };
+    }
+
+    if (typeof global.__DoAsyncPostBack !== 'function') {
+        global.__DoAsyncPostBack = function (meta, url, callback) {
+            __PromisAsyncPostBack(meta, url)
+                .then(function (ajaxOut) {
+                    if (callback == null) {
+                        return;
+                    }
+
+                    if (typeof callback.Callback === 'function') {
+                        callback.Callback(ajaxOut);
+                    } else if (typeof callback === 'function') {
+                        callback(ajaxOut);
+                    }
+                })
+                .catch(function () { });
+        };
+    }
+
+    if (typeof global.__DoAsyncPostBackWebMethod !== 'function') {
+        global.__DoAsyncPostBackWebMethod = function (meta, url, callback) {
+            __PromisAsyncPostBack(meta, url)
+                .then(function (ajaxOut) {
+                    if (typeof callback === 'function') {
+                        callback(ajaxOut);
+                    }
+                })
+                .catch(function () { });
+        };
+    }
+})(window);
 var Core = {
     downloadWindow: null,
     gridDefault: {
