@@ -1,5 +1,7 @@
-const UserDBListPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default UserDBListPage;
+const UserDBListPage = () => {
+  return <LegacyLayoutMounts withLeftMenu={false} />
+}
+
+export default UserDBListPage

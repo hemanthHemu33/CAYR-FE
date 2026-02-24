@@ -1,5 +1,7 @@
-const PatientDetailsPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default PatientDetailsPage;
+const PatientDetailsPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default PatientDetailsPage

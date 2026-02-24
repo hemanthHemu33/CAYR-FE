@@ -1,5 +1,7 @@
-const ManageUserPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default ManageUserPage;
+const ManageUserPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default ManageUserPage

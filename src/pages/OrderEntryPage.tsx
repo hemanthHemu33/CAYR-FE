@@ -1,5 +1,7 @@
-const OrderEntryPage = () => {
-  return null;
-};
+import LegacyLayoutMounts from '../layouts/LegacyLayoutMounts'
 
-export default OrderEntryPage;
+const OrderEntryPage = () => {
+  return <LegacyLayoutMounts />
+}
+
+export default OrderEntryPage
