@@ -1,3 +1,5 @@
-export default function LoginPage() {
-  return null
-}
+const LoginPage = () => {
+  return null;
+};
+
+export default LoginPage;
